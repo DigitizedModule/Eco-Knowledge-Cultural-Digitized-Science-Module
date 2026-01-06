@@ -1,0 +1,3196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ 
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Interactive Presentation with Frame</title>
+  <style>
+    :root {
+      --primary-color: #3dca19;
+      --secondary-color: #473825;
+      --accent-color: #ffcc00;
+      --text-bg: rgba(255, 247, 176, 0.479);
+      --frame-bg: rgba(212, 212, 212, 0.479);
+      --white-bg: rgba(255, 255, 255, 0.9);
+      --slide-bg: #111;
+      --error-color: #f44336;
+      --success-color: #4CAF50;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #222;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Mobile-first scaling approach */
+    .center-wrapper {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /*.frame-wrapper {
+      transform-origin: top left;
+      max-width: 100%;
+      max-height: 100%;
+    }*/
+
+   .frame {
+      width: 1200px;
+      height: 700px;
+      border: 10px solid #444;
+      border-radius: 15px;
+      background: var(--slide-bg);
+      box-shadow: 0 0 30px rgba(0,0,0,0.7);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Responsive scaling */
+   @media screen and (max-width: 768px) {
+  .frame-wrapper {
+    transform: none;   /* ⬅ remove scaling */
+  }
+}
+
+    /* Mobile-specific adjustments */
+    /* Mobile adjustments */
+    @media screen and (max-width: 768px) {
+      .frame {
+        width: 100vw;
+        height: 100vh;
+        border-width: 5px;
+        border-radius: 0;
+      }
+
+      .slide {
+        padding: 0.5em;
+        overflow-y: auto;
+      }
+
+      .text-frame {
+        margin: 0.3em auto;
+        padding: 10px;
+        border-radius: 10px;
+        border-width: 3px;
+        max-width: 95%;
+      }
+
+      h1 { font-size: clamp(1.2rem, 6vw, 2em); }
+      p  { font-size: clamp(0.9rem, 4vw, 1.1em); }
+
+      .choice, button {
+        padding: 12px 16px;
+        font-size: 0.9em;
+        border-radius: 6px;
+      }
+
+      .slide-nav {
+  pointer-events: auto;
+}
+
+.slide {
+  pointer-events: auto;
+}
+
+      .controls { gap: 10px; }
+
+      .answer-input {
+        width: 180px;
+        height: 40px;
+        font-size: 0.9em;
+      }
+
+      .jumbled-letters {
+        font-size: 1.1em;
+        letter-spacing: 2px;
+      }
+    }
+
+    /* Tablet adjustments */
+    @media screen and (min-width: 769px) and (max-width: 1024px) {
+      .frame-wrapper {
+        transform: scale(calc(min(100vw / 1200, 100vh / 700)));
+      }
+      
+      .text-frame {
+        margin: 0.4em auto;
+        padding: 12px;
+      }
+      
+      h1 {
+        font-size: clamp(1.4rem, 5vw, 2.2em);
+      }
+      
+      p {
+        font-size: clamp(1rem, 3vw, 1.15em);
+      }
+      
+      .choice {
+        padding: 14px 18px;
+        font-size: 1em;
+      }
+    }
+
+    /* Desktop styles */
+    @media screen and (min-width: 1200px) and (min-height: 700px) {
+      .frame-wrapper {
+        transform: scale(1);
+      }
+    }
+
+    .slide {
+      display: none;
+      flex: 1;
+      width: 100%;
+      padding: 1em;
+      box-sizing: border-box;
+      text-align: center;
+      color: #fff;
+      overflow-y: auto;
+      position: relative;
+      padding-bottom: 80px;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      animation: fadeIn 0.5s ease;
+      padding-top: 0.5em;
+    }
+
+    /* Slide backgrounds with fallbacks */
+    .slide._1 {
+      background: url("images/Frame1.png") no-repeat center center;
+      background-size: cover;
+      background-color: #1e3c72;
+    }
+
+    .slide._2 {
+      background: url("images/Frame2.png") no-repeat center center;
+      background-size: cover;
+      background-color: #134e5e;
+    }
+
+    .slide._3 {
+      background: url("images/Frame3.png") no-repeat center center;
+      background-size: cover;
+      background-color: #8360c3;
+    }
+
+    .slide._4 {
+      background: url("images/Frame4.png") no-repeat center center;
+      background-size: cover;
+      background-color: #f093fb;
+    }
+
+    .slide._5 {
+      background: url("images/Frame5.png") no-repeat center center;
+      background-size: cover;
+      background-color: #4facfe;
+    }
+
+    .slide._6 {
+      background: url("images/Frame4.png") no-repeat center center;
+      background-size: cover;
+      background-color: #fa709a;
+    }
+
+    .slide._7 {
+      background: url("images/Frame5.png") no-repeat center center;
+      background-size: cover;
+      background-color: #30cfd0;
+    }
+
+    .slide._8 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #7b68ee;
+    }
+
+    .slide._9 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #7b68ee;
+    }
+
+    .slide._10 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+
+    .slide._11 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+
+    .slide._12 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+
+    .slide._13 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+
+    .slide._14 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    
+    .slide._15 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    
+    .slide._16 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    
+    .slide._17 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._18 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._19 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._20 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._21 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._22 {
+      background: url("images/Frame7.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._23 {
+      background: url("images/Frame8.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._24 {
+      background: url("images/Frame9.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._25 {
+      background: url("images/Frame8.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._26 {
+      background: url("images/Frame8.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._27 {
+      background: url("images/Frame10.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+     .slide._28 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._29 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._30 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._31 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._32 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._33 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._34 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._35 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._36 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._37 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._38 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._39 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._40 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._41 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+     .slide._42 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._43 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._44 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._45 {
+      background: url("images/Frame11.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._46 {
+      background: url("images/Frame4.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._47 {
+      background: url("images/refImage.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    
+
+
+    .slide-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 5px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+
+    .controls {
+      display: flex;
+      gap: 20px;
+    }
+
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2.5em);
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      font-size: clamp(1rem, 2vw, 1.2em);
+      line-height: 1.6;
+    }
+
+    .text-frame {
+      margin: 0.5em auto;
+      background: var(--text-bg);
+      color: #000;
+      padding: 15px;
+      border-radius: 15px;
+      border: 5px solid rgba(92, 92, 92, 0.65);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      text-align: center;
+      max-width: 90%;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .text-frame.left-align {
+      position: absolute;
+      left: 8%;
+      top: 10%;
+      max-width: 30%;
+      text-align: left;
+    }
+    
+    .text-frame.right-align {
+      position: absolute;
+      right: 8%;
+      top: 30%;
+      max-width: 30%;
+      text-align: right;
+    }
+
+    .text-frame.top-left {
+      position: absolute;
+      left: 2%;
+      top: 5%;
+      max-width: 30%;
+      text-align: left;
+    }
+
+    .text-frame.top-center {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 40%;
+      text-align: center;
+    }
+
+    .text-frame.slide-left {
+      animation: slideInLeft 1s ease forwards;
+    }
+
+    .text-frame.slide-up {
+      animation: slideInUp 1s ease forwards;
+    }
+
+    .text-frame.zoom {
+      animation: zoomIn 0.8s ease forwards;
+    }
+
+    .text-frame.glow {
+      animation: pulseGlow 2s infinite;
+    }
+
+    @keyframes slideInLeft {
+      from { transform: translateX(-100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideInUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+      50% { box-shadow: 0 0 30px rgba(255,255,255,1); }
+      100% { box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+    }
+
+    .text-frame.fade-text strong {
+      animation: textFade 3s ease forwards;
+    }
+
+    .text-frame.glow-text strong {
+      animation: textGlow 2s infinite;
+    }
+
+    .text-frame.typing-text strong {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      animation: typing 2s steps(40, end), blink 0.75s step-end infinite;
+    }
+
+    @keyframes textFade {
+      0% { opacity: 0; color: #fff; }
+      50% { opacity: 1; color: var(--accent-color); }
+      100% { opacity: 1; color: #00e0ff; }
+    }
+
+    @keyframes textGlow {
+      0% { text-shadow: 0 0 5px #fff; }
+      50% { text-shadow: 0 0 20px var(--accent-color), 0 0 30px var(--accent-color); }
+      100% { text-shadow: 0 0 5px #fff; }
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    button {
+      background: var(--primary-color);
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      margin: 0 10px;
+      cursor: pointer;
+      font-size: 1em;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      touch-action: manipulation;
+    }
+
+    button:hover:not(:disabled) {
+      background: #666;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      background: #666;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .choices-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 15px 0;
+      width: 100%;
+    }
+
+    .choice {
+      padding: 15px;
+      font-size: 1em;
+      text-align: left;
+      background: #8d8d8d;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      touch-action: manipulation;
+    }
+
+    .choice:hover {
+      background: #414141;
+      transform: scale(1.02);
+    }
+
+    .choice.selected {
+      background: var(--primary-color);
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .choice.correct {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .choice.incorrect {
+      background: #f44336;
+      color: white;
+    }
+
+    ul, ol {
+      text-align: left;
+      max-width: 90%;
+      margin: 0 auto;
+    }
+
+    .quiz-container {
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .question {
+      margin-bottom: 20px;
+      background: var(--white-bg);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .question p {
+      font-size: 1.1em;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .results-container {
+      display: none;
+      background: var(--white-bg);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      margin-top: 20px;
+      width: 90%;
+      max-width: 900px;
+    }
+
+    .results-container.show {
+      display: block;
+      animation: slideInUp 0.5s ease forwards;
+      color: black;
+    }
+
+    .score-display {
+      font-size: 2em;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .result-item {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+
+    .result-item.correct {
+      background: rgba(76, 175, 80, 0.2);
+      border-left: 4px solid #4CAF50;
+    }
+
+    .result-item.incorrect {
+      background: rgba(244, 67, 54, 0.2);
+      border-left: 4px solid #f44336;
+    }
+
+    .slide-counter {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .check-answers-btn {
+      
+      background: #ff9800;
+      margin-top: 20px;
+    }
+
+    .check-answers-btn:hover {
+      background: #e68900;
+    }
+
+    .activity-container {
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .activity-question {
+      background: var(--white-bg);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      width: 100%;
+      text-align: left;
+    }
+
+    .activity-question p {
+      font-size: 1.1em;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .jumbled-letters {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      font-size: 1.2em;
+      color: #d32f2f;
+      letter-spacing: 3px;
+      margin: 10px 0;
+    }
+
+    .answer-input {
+      display: inline-block;
+      width: 250px;
+      min-width: 250px;
+      height: 36px;
+      border: 2px solid #333;
+      border-radius: 4px;
+      padding: 0 8px;
+      margin: 0 10px;
+      vertical-align: middle;
+      font-size: 1em;
+      text-transform: uppercase;
+    }
+
+    .answer-input.correct {
+      border-color: #4CAF50;
+      background-color: rgba(76, 175, 80, 0.1);
+    }
+
+    .answer-input.incorrect {
+      border-color: #f44336;
+      background-color: rgba(244, 67, 54, 0.1);
+    }
+
+    .activity-feedback {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      display: none;
+    }
+
+    .activity-feedback.success {
+      background: rgba(76, 175, 80, 0.2);
+      border: 2px solid #4CAF50;
+      color: #2E7D32;
+      display: block;
+    }
+
+    .activity-feedback.error {
+      background: rgba(244, 67, 54, 0.2);
+      border: 2px solid #f44336;
+      color: #C62828;
+      display: block;
+    }
+
+    .activity-feedback.partial {
+      background: rgba(255, 152, 0, 0.2);
+      border: 2px solid #ff9800;
+      color: #E65100;
+      display: block;
+    }
+
+    .correct-answer {
+      display: inline-block;
+      margin-left: 10px;
+      padding: 5px 10px;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .incorrect-answer {
+      display: inline-block;
+      margin-left: 10px;
+      padding: 5px 10px;
+      background-color: #f44336;
+      color: white;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .correct-answer-only {
+      display: inline-block;
+      margin-left: 10px;
+      padding: 5px 10px;
+      background-color: #2196F3;
+      color: white;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .case-button {
+      display: inline-block;
+      padding: 15px 25px;
+      margin: 10px;
+      border-radius: 10px;
+      font-size: 1.1em;
+      font-weight: bold;
+      text-decoration: none;
+      color: #000;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      border: 3px solid rgba(0,0,0,0.2);
+    }
+
+    .case-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .case-button.pink {
+      background-color: #ffb6c1;
+    }
+
+    .case-button.yellow {
+      background-color: #ffeb3b;
+      color: #000;
+    }
+
+    .case-button.red {
+      background-color: #ff5252;
+    }
+
+    /* Mobile-specific adjustments for quiz */
+    @media screen and (max-width: 768px) {
+      
+      .choices-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .choice {
+        padding: 12px;
+        font-size: 0.9em;
+      }
+      
+      .quiz-container {
+        width: 95%;
+        padding: 0 5px;
+      }
+      
+      .question {
+        padding: 12px;
+      }
+      
+      .check-answers-btn {
+        width: 100%;
+        margin-top: 15px;
+        padding: 12px;
+      }
+    }
+    /* Add to your existing CSS */
+
+/* Touch feedback state */
+button.touching,
+.choice.touching,
+.case-button.touching {
+  transform: translateY(0) !important;
+  background: #555 !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3) !important;
+  opacity: 0.8 !important;
+}
+
+/* Improved mobile touch target size */
+@media screen and (max-width: 768px) {
+  .slide-nav {
+    font-size: 0.8rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    height: 48px;          /* smaller height */
+    padding: 4px 8px;      /* tighter padding */
+  }
+}
+
+
+/* Ensure proper active state reset */
+button:active:not(:disabled),
+.choice:active,
+.case-button:active {
+  transform: translateY(0) !important;
+  background: #555 !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3) !important;
+  opacity: 0.8 !important;
+}
+
+/* Reset active state when touch ends */
+@supports (-webkit-touch-callout: none) {
+  button:active:not(:disabled):not(.touching),
+  .choice:active:not(.touching),
+  .case-button:active:not(.touching) {
+    transform: translateY(-2px) !important;
+    background: #666 !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3) !important;
+    opacity: 1 !important;
+  }
+}
+  </style>
+</head>
+<body>
+<div class="center-wrapper">
+<div class="frame-wrapper">
+<div class="frame">
+    <!-- Slide 1 -->
+    <section class="slide _1 active">
+      <div class="text-frame zoom" style="font-size: clamp(3rem, 8vw, 5em); margin-bottom: 15px;">
+        <strong>Eco-Knowledge Cultural <br> Digitized Science Module</strong>
+      </div>
+      <div class="text-frame zoom" style="background: var(--frame-bg); font-size: clamp(2rem, 6vw, 3em); margin-bottom: 15px;">
+        <strong>Marine and Coastal <br> Processes in Coastal Communities</strong>
+      </div>
+      <div class="text-frame zoom" style="background: var(--frame-bg); font-size: clamp(1.2rem, 4vw, 1.8em);">
+        <strong>Contextualized for Siargao Island <br> (Sta. Monica, Surigao del Norte)</strong>
+      </div>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide _2" >
+
+      <div class="text-frame zoom" style="font-size: clamp(3rem, 8vw, 5em); margin-bottom: 15px;">
+        <strong>EARTH SCIENCE 11 </strong><br>
+    Marine and Coastal Processes
+      </div>
+
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide _3">
+      <div class="text-frame zoom" style="font-size: clamp(1.2rem, 4vw, 1.8em); text-align: left; max-width: 95%;">
+        <strong>Welcome to Your Digitized Self-Learning Module</strong><br><br>
+        This Digitized Self-Learning Module (DSLM) is designed so you can continue learning anytime, anywhere, even at home. Each part of the module is interactive—you will click, drag, and select answers to explore the lesson step by step.<br><br>
+        The module has several sections to guide you:
+        <ul>
+          <li>Pre-Test – a short clickable quiz to check what you already know.</li>
+          <li>Discussion – clear explanations with visuals, stories from elders (Local Ecological Knowledge), and scientific insights.</li>
+          <li>Activities – fun and interactive tasks such as dragging, selecting, and case analysis to help you apply what you've learned.</li>
+          <li>Post-Test – another clickable quiz to check your progress.</li>
+        </ul><br>
+        Remember: honesty is important. Try answering first before checking any feedback. If you find something difficult, do not worry—review the discussion part or ask your teacher or facilitator for help.
+      </div>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide _4">
+      <div class="text-frame zoom" style="font-size: clamp(1.2rem, 4vw, 1.8em); background: rgba(255, 255, 255, 0.8); text-align: left; max-width: 95%;">
+        <strong>About this Digitized Module </strong><br><br>
+        This module was designed and written with you in mind. It will help you explore and understand important concepts in <strong>Earth Science</strong>, focusing on the nature of marine and coastal processes. The activities are interactive—you will click, drag, and select answers as you go along—so that learning feels more engaging and practical.<br><br>
+        The scope of this module allows it to be used in different learning settings. The language is simple and student-friendly, recognizing that learners may have varied vocabulary levels. The lesson follows the standard sequence of the course, but you can also explore the parts in a flexible way, depending on your pace and needs.
+      </div>
+    </section>
+
+    <!-- Slide 5 -->
+    <section class="slide _5">
+      <div class="text-frame zoom" style="font-size: clamp(1.2rem, 4vw, 1.8em);background: rgba(255, 255, 255, 0.8); text-align: left; max-width: 95%;">
+        <strong>This module covers: </strong><br><br>
+        <strong>Lesson 1 – Effects of Marine and Coastal Processes<br><br>
+        After completing this module, you are expected to:</strong><br>
+        <ol>
+          <li>Describe how marine and coastal processes result in coastal hazards (S11/12ES-Ih-38).</li><br>
+          <li>Explain how coastal erosion, submersion, and saltwater intrusion occur (S11/12ES-Ih-38).</li>
+        </ol><br>
+        <strong>Integrated Knowledge:</strong><br>
+        Throughout the lesson, you will encounter not only scientific explanations but also Local Ecological Knowledge (LEK) shared through stories, images, and community practices. This way, you will see how the wisdom of our elders and modern science can work together to protect our coasts and cultural identity.
+      </div>
+    </section>
+
+    <!-- Slide 6 - ALL QUESTIONS IN ONE SLIDE -->
+    <section class="slide _6">
+      <div class="text-frame" style="background: rgba(255, 255, 255, 0.8); font-size: clamp(1.5rem, 5vw, 1.8em); margin-top: 0.5em;">
+        <strong>What I know</strong>
+      </div>
+      <div class="text-frame zoom" style="background: rgba(255, 231, 123, 0.8); font-size: clamp(1.2rem, 4vw, 1.5em); margin-top: 0.3em;">
+        Choose and click the correct answer.
+      </div>
+      <div class="quiz-container">
+        <!-- Question 1 -->
+        <div class="question">
+          <p>1. Maria Leah lives in a coastal village in Sta. Monica where strong waves frequently hit the shore. She notices the shoreline is slowly moving closer to their house every year. What process is most likely causing this?</p>
+          <div class="choices-grid">
+            <button class="choice" data-q="1" data-a="a">A. Earthquakes</button>
+            <button class="choice" data-q="1" data-a="b">B. Tidal waves</button>
+            <button class="choice" data-q="1" data-a="c">C. Wave action</button>
+            <button class="choice" data-q="1" data-a="d">D. Rainfall</button>
+          </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+          <p>2. The family of Silverio lives in a low-lying coastal area. During high tides and storms, water often floods their land, making it unusable for farming. What coastal hazard is affecting their area?</p>
+          <div class="choices-grid">
+            <button class="choice" data-q="2" data-a="a">A. Submersion</button>
+            <button class="choice" data-q="2" data-a="b">B. Saltwater intrusion</button>
+            <button class="choice" data-q="2" data-a="c">C. Deposition</button>
+            <button class="choice" data-q="2" data-a="d">D. Sedimentation</button>
+          </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+          <p>3. Emmanuel Joy is assigned to monitor wave activity in a coastal barangay. Which instrument should he use to measure wave height?</p>
+          <div class="choices-grid">
+            <button class="choice" data-q="3" data-a="a">A. Thermometer</button>
+            <button class="choice" data-q="3" data-a="b">B. Seismograph</button>
+            <button class="choice" data-q="3" data-a="c">C. Wave buoy</button>
+            <button class="choice" data-q="3" data-a="d">D. Anemometer</button>
+          </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+          <p>4. Several residents in Barangay Tangbo notice a salty taste in their well water after the dry season. Which process is most likely responsible?</p>
+          <div class="choices-grid">
+            <button class="choice" data-q="4" data-a="a">A. Eutrophication</button>
+            <button class="choice" data-q="4" data-a="b">B. Subduction</button>
+            <button class="choice" data-q="4" data-a="c">C. Saltwater intrusion</button>
+            <button class="choice" data-q="4" data-a="d">D. Infiltration</button>
+          </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+          <p>5. Two coastal towns — one sheltered by cliffs and another open to the sea — have different erosion rates. Why is erosion faster in the second town?</p>
+          <div class="choices-grid">
+            <button class="choice" data-q="5" data-a="a">A. Frequent earthquakes</button>
+            <button class="choice" data-q="5" data-a="b">B. Strong and constant wave energy</button>
+            <button class="choice" data-q="5" data-a="c">C. Heavy rainfall</button>
+            <button class="choice" data-q="5" data-a="d">D. Human migration</button>
+          </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+          <p>6. In Barangay T-Arlan, mangroves were planted 10 years ago and typhoon damage decreased. How do mangroves help reduce coastal hazards?</p>
+          <div class="choices-grid">
+            <button class="choice" data-q="6" data-a="a">A. They block sunlight</button>
+            <button class="choice" data-q="6" data-a="b">B. They reduce salinity</button>
+            <button class="choice" data-q="6" data-a="c">C. They act as natural wave barriers</button>
+            <button class="choice" data-q="6" data-a="d">D. They increase erosion</button>
+          </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question">
+          <p>7. A coastal village builds houses along the shore without natural barriers. After a storm, severe erosion occurs. Which human action increased the risk?</p>
+          <div class="choices-grid">
+            <button class="choice" data-q="7" data-a="a">A. Strengthening sea walls</button>
+            <button class="choice" data-q="7" data-a="b">B. Reducing wave energy</button>
+            <button class="choice" data-q="7" data-a="c">C. Increasing exposure to erosion</button>
+            <button class="choice" data-q="7" data-a="d">D. Stopping submersion</button>
+          </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question">
+          <p>8. A farmer near the sea finds his well water is salty in summer. What does this suggest about groundwater?</p>
+          <div class="choices-grid">
+            <button class="choice" data-q="8" data-a="a">A. Quality improves in summer</button>
+            <button class="choice" data-q="8" data-a="b">B. Freshwater is unfit for drinking</button>
+            <button class="choice" data-q="8" data-a="c">C. It indicates saltwater intrusion</button>
+            <button class="choice" data-q="8" data-a="d">D. It prevents erosion</button>
+          </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question">
+          <p>9. In Magsaysay, elders plant nipa palms along the shorelines as their ancestors did. What is the main benefit of this cultural practice?</p>
+          <div class="choices-grid">
+            <button class="choice" data-q="9" data-a="a">A. Preventing erosion and flooding</button>
+            <button class="choice" data-q="9" data-a="b">B. Logging</button>
+            <button class="choice" data-q="9" data-a="c">C. Overfishing</button>
+            <button class="choice" data-q="9" data-a="d">D. Sand mining</button>
+          </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question">
+          <p>10. Jeighna Grey lives near the coast where storm surges are stronger than in inland areas. Why are such coastal communities more at risk?</p>
+          <div class="choices-grid">
+            <button class="choice" data-q="10" data-a="a">A. Farther inland</button>
+            <button class="choice" data-q="10" data-a="b">B. Near mountains</button>
+            <button class="choice" data-q="10" data-a="c">C. Low elevation and proximity to sea</button>
+            <button class="choice" data-q="10" data-a="d">D. Stronger buildings</button>
+          </div>
+        </div>
+
+        <!-- Check All Answers Button at Bottom -->
+       
+       <button class="check-answers-btn" id="checkAnswersBtn">
+          Check All Answers
+      </button>
+      </div>
+
+      <!-- Results Container -->
+      <div id="results-container" class="results-container">
+        <div class="score-display" id="score-display"></div>
+        <div id="results-details"></div>
+      </div>
+    </section>
+
+    <!-- Slide 7 - Lesson 1 -->
+    <section class="slide _7">
+      <div class="text-frame" style="background: rgba(255, 255, 255, 0.9); font-size: clamp(1.8rem, 6vw, 4em); color: #000000;">
+        <strong>LESSON 1 </strong><br>
+        Effects of Marine and Coastal Processes
+      </div>
+    </section>
+
+    <!-- Slide 8 - NEW SLIDE with Frame6.png background -->
+    <section class="slide _8">
+      <div class="text-frame center" style="background-color: rgba(255, 255, 255, 0.637); font-size: clamp(1rem, 3vw, 1.3em); line-height: 1.8;">
+    
+    <img 
+      src="images/figure1.png" 
+      alt="Coastal ecosystems in the Philippines"
+      style="max-width: 100%; height: auto; margin-bottom: 15px; border-radius: 8px;"
+    >
+    <br>
+    <strong>
+      The coast is one of the most active parts of the Earth's surface. In the Philippines, many people live near coastal areas and depend on mangroves, seagrass, beach forests, and coral reefs for food and protection. Local fishers and elders know that mangroves help reduce the impact of strong waves and storms, while coral reefs serve as homes for many fish.
+    </strong>
+
+  </div>
+
+    </section>
+
+    <!-- Slide 9 - NEW SLIDE with same Frame6.png background -->
+  <section class="slide _9">
+  <div class="text-frame center" style="background-color: rgba(255, 255, 255, 0.637); font-size: clamp(1rem, 3vw, 1.3em); line-height: 1.8;">
+    
+    <img 
+      src="images/figure1.png" 
+      alt="Coastal processes illustration"
+      style="max-width: 100%; height: auto; margin-bottom: 15px; border-radius: 8px;"
+    >
+    <br>
+    <strong>
+      Coastal processes such as waves, tides, and erosion continuously shape the land and sea. These are natural events, but when disturbed by human activities, they can lead to hazards like coastal flooding and storm surges. Knowing both scientific facts and local observations helps communities better understand and protect their coastal environment.
+    </strong>
+
+  </div>
+  </section>
+
+    <!-- Slide 10 - ACTIVITY SLIDE with Frame7.png background -->
+    <section class="slide _10">
+       <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; text-align: left; margin-bottom: 0.5em;">
+    What's In
+  </div>
+  <div class="text-frame" style="font-size: clamp(1.5rem, 4.5vw, 2em); font-weight: bold; background: rgba(255,255,255,0.9); color: #000; text-align: center; padding: 0.2em 0.5em; border-radius: 4px; margin-bottom: 1em;">
+    ACTIVITY 1
+  </div>
+  <div class="text-frame zoom" style="background: rgba(255,255,255,0.9); text-align: left; max-width: 100%; margin-bottom: 1em; padding: 0.3em; border-radius: 4px;">
+    <strong>Directions:</strong> Rearrange the jumbled letters and identify the term being referred to in each item. Write your answer on the space provided. Each clue is based on how both science and local communities understand coastal processes.
+  </div>
+      <div class="activity-container">
+        <div class="activity-question">
+          <p>1. Local fishers notice the regular rise and fall of seawater, which they use to plan fishing trips. These are caused by the gravitational pull between the moon and Earth.</p>
+          <div class="jumbled-letters">EITSD</div>
+          <p>Answer: <input type="text" class="answer-input" id="answer1" maxlength="10"></p>
+          <div id="feedback1"></div>
+        </div>
+        <div class="activity-question">
+          <p>2. Elders recall that during strong winds and storms, large water movements form and crash on the shore.</p>
+          <div class="jumbled-letters">AWVES</div>
+          <p>Answer: <input type="text" class="answer-input" id="answer2" maxlength="10"></p>
+          <div id="feedback2"></div>
+        </div>
+        <div class="activity-question">
+          <p>3. Communities hear in the news that the gradual melting of glaciers and icebergs adds to the rise of seawater, which also threatens low-lying barangays.</p>
+          <div class="jumbled-letters">AES EVELL ESIR</div>
+          <p>Answer: <input type="text" class="answer-input" id="answer3" maxlength="20"></p>
+          <div id="feedback3"></div>
+        </div>
+        <div class="activity-question">
+          <p>4. Farmers and fisherfolk sometimes feel the shaking of the ground when rocks beneath the Earth move suddenly. This refers to the motion of the outermost shell of the Earth.</p>
+          <div class="jumbled-letters">QARKEUHTEA</div>
+          <p>Answer: <input type="text" class="answer-input" id="answer4" maxlength="15"></p>
+          <div id="feedback4"></div>
+        </div>
+        <div class="activity-question">
+          <p>5. Coastal residents describe this as the sudden rising of seawater during typhoons, often flooding their houses.</p>
+          <div class="jumbled-letters">TOSRM RGESUS</div>
+          <p>Answer: <input type="text" class="answer-input" id="answer5" maxlength="15"></p>
+          <div id="feedback5"></div>
+        </div>
+        <button class="check-answers-btn" id="checkActivityBtn">
+          Check Answers
+        </button>
+        <div id="activity-feedback" class="activity-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Slide 11 - Individual Activity with Frame7.png background -->
+    <section class="slide _11">
+      <div class="text-frame zoom" style="font-size: clamp(1.2rem, 4vw, 1.8em); background: rgba(255, 255, 255, 0.9); text-align: left; max-width: 95%; margin-bottom: 20px;">
+        <strong>Individual Activity – Coastal Case Analysis</strong><br><br>
+        <strong>Instructions for Students:</strong><br>
+        Click or open each case file below. Read the scenario carefully and answer the guide questions.
+      </div>
+      
+      <div style="font-size: clamp(1.2rem, 4vw, 1.8em); display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSf86vRCVkLvK2mJjdPimtXv4_k-TPzo425cpMe97niYT6BtHA/viewform?fbzx=6107663764069005554" target="_blank" class="case-button pink">
+          📂 Case 1: Barangay Alegria – Retreating Shoreline
+        </a>
+        
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNpsjnBnuU2ZWiSj0xLs28NkwQVAPHcza0xeF2VCpq8Q-LtA/viewform" target="_blank" class="case-button yellow">
+          📂 Case 2: Barangay Tangbo – Angry Sea
+        </a>
+        
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScw_iLfAjYuVpEqU3mNvGhzGqbgEm1Aji_-DlsMF1rSA1nTuw/viewform" target="_blank" class="case-button red">
+          📂 Case 3: Barangay Magsaysay – Salty Wells
+        </a>
+      </div>
+    </section>
+
+    <!-- Slide 12 - What's New with Frame7.png background -->
+   <section class="slide _12" style="padding: 2% 3%; box-sizing: border-box;">
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What's New
+  </div>
+
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; max-width: 100%; padding: 0.5em; border-radius: 4px;">
+    <strong>Revisiting Marine and Coastal Processes (LEK-Integrated)</strong><br><br>
+    Have you noticed the terms in the previous activity? They all describe marine and coastal processes. The science that studies these processes in our oceans and seas is called oceanography. It combines knowledge from physics, chemistry, biology, geology, meteorology, mathematics, and even social sciences to explain the connection between people and the sea.<br><br>
+    For coastal communities in the Philippines, these processes are not just scientific terms but part of daily life. Fishers observe tides to know the best time to go out to sea. Elders recall strong waves and storm surges that reshaped their shorelines. Farmers in coastal barangays notice sea level rise slowly affecting rice fields and wells. Earthquakes and crustal movements are remembered for causing tsunamis in some areas.
+  </div>
+</section>
+
+    <!-- Slide 13 - Coastal Processes with Frame7.png background -->
+   <section class="slide _13" style="padding: 2% 3%; box-sizing: border-box;">
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What's New
+  </div>
+
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; max-width: 100%; padding: 0.5em; border-radius: 4px;">
+    <strong>Coastal processes include waves, tides, sea level change, crustal movement, and storm surges.</strong><br><br>
+    ● <strong>Waves</strong> are formed by wind and storms, often noticed during habagat and typhoon season.<br>
+    ● <strong>Tides</strong> are the rise and fall of seawater caused by the pull of the moon and Earth.<br>
+    ● <strong>Sea level change</strong> is seen in saltwater intrusion and the gradual flooding of low-lying barangays.<br>
+    ● <strong>Storm surge</strong> is the sudden rise of seawater during typhoons, known locally as daluyong.<br><br>
+    <strong>Crustal movement</strong> happens when the Earth's plates shift, sometimes causing ground shaking and tsunamis.
+  </div>
+</section>
+
+    <!-- Slide 14 - Effects of Marine and Coastal Processes with Frame7.png background -->
+<section class="slide _14" style="padding: 2% 3%; box-sizing: border-box;">
+  <!-- Slide Title -->
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What's New
+  </div>
+
+  <!-- Slide Content -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; max-width: 100%; padding: 0.5em; border-radius: 4px; margin-bottom: 1em;">
+    <strong>Effects of Marine and Coastal Processes</strong><br><br>
+    When these processes intensify, they may result in coastal hazards such as erosion, flooding, and damage to homes, crops, and fishing grounds. Local knowledge, combined with science, helps communities prepare and adapt to these changes.
+  </div>
+
+  <!-- Slide Image -->
+  <div style="text-align: center; margin-bottom: 1em;">
+    <img src="images/CoastalHazard.png" alt="Coastal Hazard" style="max-width: 100%; height: auto; border-radius: 6px;">
+  </div>
+</section>
+
+
+    <section class="slide _15" style="padding: 2% 3%; box-sizing: border-box;">
+  <!-- Slide Title -->
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What's New
+  </div>
+
+  <!-- Slide Content -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; max-width: 100%; padding: 0.5em; border-radius: 4px;">
+    <strong>Coastal Erosion (LEK in Siargao)</strong><br><br>
+    Coastal erosion is the loss or wearing away of land along the shoreline due to the action of waves, tides, currents, strong winds, and storms. In Siargao, residents observe how shorelines slowly change after strong typhoons. Locals recall that during Typhoon Odette (Rai, 2021), many parts of the coast were eaten away by big waves, washing out coconut trees and damaging houses near the shore.<br><br>
+    Fisherfolk also notice that <strong>habagat winds and monsoon waves</strong> gradually erode beaches, especially in areas with fewer mangroves or beach forests. In contrast, elders share that places with <strong>healthy mangroves and seagrass beds</strong> are better protected because their roots and thick vegetation help trap sand and lessen wave impact.
+  </div>
+</section>
+
+
+
+   <section class="slide _16" style="padding: 2% 3%; box-sizing: border-box;">
+  <!-- Slide Title -->
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What's New
+  </div>
+
+  <!-- Slide Content -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; max-width: 100%; padding: 0.5em; border-radius: 4px;">
+    <strong>Saltwater Intrusion</strong><br><br>
+    Saltwater intrusion happens when seawater seeps into underground freshwater sources, called <strong>aquifers</strong>. These aquifers are made of sand, gravel, or rock that hold groundwater, which people usually get through wells. When saltwater mixes with this groundwater, the water becomes too salty to drink or use for farming. Once an aquifer is contaminated, it can take years, even centuries, to recover.<br><br>
+    In <strong>Siargao</strong>, many families in coastal barangays rely on shallow wells for drinking water. Locals have noticed that after strong typhoons or during long dry seasons, their well water sometimes turns salty. Elders explain that this often happens when the sea pushes farther inland or when too much freshwater is pumped from wells, allowing seawater to take its place. Farmers also observe that saltier soil near the shore makes it harder to grow rice, coconuts, or root crops.
+  </div>
+</section>
+   <section class="slide _17" style="padding: 2% 3%; box-sizing: border-box;">
+  <!-- Slide Title -->
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What's New
+  </div>
+
+  <!-- Slide Content -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; max-width: 100%; padding: 0.5em; border-radius: 4px; margin-bottom: 1em; line-height: 1.4;">
+    <strong>Submersion (LEK in Siargao)</strong><br><br>
+    Submersion is the movement of sand and sediments from the beach into the shallow sea. In Siargao, locals notice this after strong waves and typhoons, when parts of the beach disappear underwater. Elders share that some shorelines slowly sink or change shape, especially in areas without mangroves or beach forests that usually help hold the sand in place.
+  </div>
+
+  <!-- Slide Image -->
+  <div style="text-align: center; margin-bottom: 1em;">
+    <img src="images/Submersion.png" alt="Submersion in Siargao" style="max-width: 100%; height: auto; border-radius: 6px;">
+  </div>
+</section>
+
+
+    <section class="slide _18" style="padding: 2% 3%; box-sizing: border-box;">
+  <!-- Slide Title -->
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What's New
+  </div>
+
+  <!-- Directions -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; padding: 0.5em; border-radius: 4px; margin-bottom: 1em;">
+    <strong>Directions:</strong> Look at the pictures presented below. Describe how prone or vulnerable the places are to coastal hazards such as erosion, storm surge, flooding, or saltwater intrusion. Use both what you know from science and what local people in Siargao observe or experience. Write your answers in at least two sentences each.
+  </div>
+
+  <!-- Image -->
+  <div style="text-align: center; margin-bottom: 1em;">
+    <img src="images/imageTest1.png" alt="Coastal area" style="max-width: 100%; height: auto; border-radius: 6px;">
+  </div>
+
+  <!-- Answer Box -->
+  <div style="margin-bottom: 1em;">
+    <textarea placeholder="Write your answer here..." style="width: 100%; min-height: 120px; padding: 0.5em; font-size: 1rem; border: 2px solid #ccc; border-radius: 6px; resize: vertical;"></textarea>
+  </div>
+</section>
+<section class="slide _19" style="padding: 2% 3%; box-sizing: border-box;">
+  <!-- Slide Title -->
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What's New
+  </div>
+
+  <!-- Directions -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; padding: 0.5em; border-radius: 4px; margin-bottom: 1em;">
+    <strong>Directions:</strong> Look at the pictures presented below. Describe how prone or vulnerable the places are to coastal hazards such as erosion, storm surge, flooding, or saltwater intrusion. Use both what you know from science and what local people in Siargao observe or experience. Write your answers in at least two sentences each.
+  </div>
+
+  <!-- Image -->
+  <div style="text-align: center; margin-bottom: 1em;">
+    <img src="images/imageTest2.png" alt="Coastal area" style="max-width: 100%; height: auto; border-radius: 6px;">
+  </div>
+
+  <!-- Answer Box -->
+  <div style="margin-bottom: 1em;">
+    <textarea placeholder="Write your answer here..." style="width: 100%; min-height: 120px; padding: 0.5em; font-size: 1rem; border: 2px solid #ccc; border-radius: 6px; resize: vertical;"></textarea>
+  </div>
+</section>
+<section class="slide _20" style="padding: 2% 3%; box-sizing: border-box;">
+  <!-- Slide Title -->
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What's New
+  </div>
+
+  <!-- Directions -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; padding: 0.5em; border-radius: 4px; margin-bottom: 1em;">
+    <strong>Directions:</strong> Look at the pictures presented below. Describe how prone or vulnerable the places are to coastal hazards such as erosion, storm surge, saltwater intrusion. Use both what you know from science and what local people in Siargao observe or experience. Write your answers in at least two sentences each.
+  </div>
+
+  <!-- Image -->
+  <div style="text-align: center; margin-bottom: 1em;">
+    <img src="images/imageTest3.png" alt="Coastal area" style="max-width: 100%; height: auto; border-radius: 6px;">
+  </div>
+
+  <!-- Answer Box -->
+  <div style="margin-bottom: 1em;">
+    <textarea placeholder="Write your answer here..." style="width: 100%; min-height: 120px; padding: 0.5em; font-size: 1rem; border: 2px solid #ccc; border-radius: 6px; resize: vertical;"></textarea>
+  </div>
+</section>
+<section class="slide _21" style="padding: 2% 3%; box-sizing: border-box;">
+  <!-- Slide Title -->
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What I Have Learned
+  </div>
+
+  <!-- Activity Directions -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; padding: 0.5em; border-radius: 4px; margin-bottom: 1em;">
+    <strong>Activity 4. Reflection Questions</strong><br><br>
+    <strong>Directions:</strong> Answer the questions below in a concise but substantial manner. Relate your answers to what you have learned from science and what local communities in Siargao observe or experience.
+  </div>
+
+  <!-- Question Frame -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); 
+                                      background: #FFF8C6; /* soft yellow */ 
+                                      text-align: left; 
+                                      padding: 0.5em; 
+                                      border-radius: 4px; 
+                                      margin-bottom: 1em;">
+    <strong>1. What happens when submersion, coastal erosion, and saltwater intrusion occur?</strong>
+  </div>
+
+  <!-- Answer Box with lined paper -->
+  <div style="margin-bottom: 1em;">
+    <textarea class="answer-box" placeholder="Write your answer here..." 
+              style="width: 98%; 
+                     min-height: 250px; 
+                     padding: 0.7em; 
+                     font-size: 1rem; 
+                     color: black; /* typed text color */ 
+                     border: 2px solid #ccc; 
+                     border-radius: 6px; 
+                     resize: vertical;
+                     background: repeating-linear-gradient(
+                       to bottom,
+                       #fff,
+                       #fff 24px,
+                       #ccc 25px
+                     ); /* lined paper effect */
+                     "></textarea>
+  </div>
+
+  <!-- Placeholder color CSS -->
+  <style>
+    .slide._21 .answer-box::placeholder {
+      color: red;
+      opacity: 1; /* ensures visibility */
+    }
+  </style>
+</section>
+
+<section class="slide _22" style="padding: 2% 3%; box-sizing: border-box;">
+  <!-- Slide Title -->
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What I Have Learned
+  </div>
+
+  <!-- Activity Directions -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; padding: 0.5em; border-radius: 4px; margin-bottom: 1em;">
+    <strong>Activity 4. Reflection Questions</strong><br><br>
+    <strong>Directions:</strong> Answer the questions below in a concise but substantial manner. Relate your answers to what you have learned from science and what local communities in Siargao observe or experience.
+  </div>
+
+  <!-- Question Frame -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); 
+                                      background: #FFF8C6; /* soft yellow */ 
+                                      text-align: left; 
+                                      padding: 0.5em; 
+                                      border-radius: 4px; 
+                                      margin-bottom: 1em;">
+    <strong>1. Why is it important to study coastal and marine processes?</strong>
+  </div>
+
+  <!-- Answer Box with lined paper -->
+  <div style="margin-bottom: 1em;">
+    <textarea class="answer-box" placeholder="Write your answer here..." 
+              style="width: 98%; 
+                     min-height: 250px; 
+                     padding: 0.7em; 
+                     font-size: 1rem; 
+                     color: black; /* typed text color */ 
+                     border: 2px solid #ccc; 
+                     border-radius: 6px; 
+                     resize: vertical;
+                     background: repeating-linear-gradient(
+                       to bottom,
+                       #fff,
+                       #fff 24px,
+                       #ccc 25px
+                     ); /* lined paper effect */
+                     "></textarea>
+  </div>
+
+  <!-- Placeholder color CSS -->
+  <style>
+    .slide._22 .answer-box::placeholder {
+      color: red;
+      opacity: 1; /* ensures visibility */
+    }
+  </style>
+</section>
+<section class="slide _22" style="padding: 2% 3%; box-sizing: border-box;">
+  <!-- Slide Title -->
+  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+    What I Can Do
+  </div>
+
+  <!-- Activity Directions -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; padding: 0.5em; border-radius: 4px; margin-bottom: 1em;">
+    <strong>Directions:</strong> As a Senior High School student, explain how you can help the local government lessen or prevent the harmful effects of coastal and marine processes such as coastal erosion, submersion, and saltwater intrusion, especially if your community is prone to these hazards. Write your answer in 3 to 5 sentences.
+  </div>
+
+  <!-- Answer Box with lined paper -->
+  <div style="margin-bottom: 1em;">
+    <textarea class="answer-box" placeholder="Write your answer here..." 
+              style="width: 98%; 
+                     min-height: 250px; 
+                     padding: 0.7em; 
+                     font-size: 1rem; 
+                     color: black; /* typed text color */ 
+                     border: 2px solid #ccc; 
+                     border-radius: 6px; 
+                     resize: vertical;
+                     background: repeating-linear-gradient(
+                       to bottom,
+                       #fff,
+                       #fff 24px,
+                       #ccc 25px
+                     ); /* lined paper effect */
+                     "></textarea>
+  </div>
+
+  <!-- Placeholder color CSS -->
+  <style>
+    .slide._22 .answer-box::placeholder {
+      color: red;
+      opacity: 1; /* ensures visibility */
+    }
+  </style>
+</section>
+<!-- Slide 23 - ASSESSMENT -->
+<section class="slide _23">
+  <!-- Title -->
+  <div class="text-frame" style="background: rgba(255, 255, 255, 0.8); font-size: clamp(1.5rem, 5vw, 1.8em); margin-top: 0.5em;">
+    <strong>ASSESSMENT</strong>
+  </div>
+
+  <!-- Instruction -->
+  <div class="text-frame zoom" style="background: rgba(255, 231, 123, 0.8); font-size: clamp(1.2rem, 4vw, 1.5em); margin-top: 0.3em;">
+    Choose and click the correct answer.
+  </div>
+
+  <div class="quiz-container">
+    <!-- Question 1 -->
+    <div class="question">
+      <p>1. Maria Leah lives in a coastal village in Sta. Monica where strong waves frequently hit the shore. She notices the shoreline is slowly moving closer to their house every year. What process is most likely causing this?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="1" data-a="a">A. Earthquakes</button>
+        <button class="choice" data-q="1" data-a="b">B. Tidal waves</button>
+        <button class="choice" data-q="1" data-a="c">C. Wave action</button>
+        <button class="choice" data-q="1" data-a="d">D. Rainfall</button>
+      </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="question">
+      <p>2. The family of Silverio lives in a low-lying coastal area. During high tides and storms, water often floods their land, making it unusable for farming. What coastal hazard is affecting their area?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="2" data-a="a">A. Submersion</button>
+        <button class="choice" data-q="2" data-a="b">B. Saltwater intrusion</button>
+        <button class="choice" data-q="2" data-a="c">C. Deposition</button>
+        <button class="choice" data-q="2" data-a="d">D. Sedimentation</button>
+      </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="question">
+      <p>3. Emmanuel Joy is assigned to monitor wave activity in a coastal barangay. Which instrument should he use to measure wave height?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="3" data-a="a">A. Thermometer</button>
+        <button class="choice" data-q="3" data-a="b">B. Seismograph</button>
+        <button class="choice" data-q="3" data-a="c">C. Wave buoy</button>
+        <button class="choice" data-q="3" data-a="d">D. Anemometer</button>
+      </div>
+    </div>
+        <!-- Question 4 -->
+    <div class="question">
+      <p>4. Several residents in Barangay Tangbo notice a salty taste in their well water after the dry season. Which process is most likely responsible?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="4" data-a="a">A. Eutrophication</button>
+        <button class="choice" data-q="4" data-a="b">B. Subduction</button>
+        <button class="choice" data-q="4" data-a="c">C. Saltwater intrusion</button>
+        <button class="choice" data-q="4" data-a="d">D. Infiltration</button>
+      </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="question">
+      <p>5. Two coastal towns — one sheltered by cliffs and another open to the sea — have different erosion rates. Why is erosion faster in the second town?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="5" data-a="a">A. Frequent earthquakes</button>
+        <button class="choice" data-q="5" data-a="b">B. Strong and constant wave energy</button>
+        <button class="choice" data-q="5" data-a="c">C. Heavy rainfall</button>
+        <button class="choice" data-q="5" data-a="d">D. Human migration</button>
+      </div>
+    </div>
+
+    <!-- Question 6 -->
+    <div class="question">
+      <p>6. In Barangay T-Arlan, mangroves were planted 10 years ago and typhoon damage decreased. How do mangroves help reduce coastal hazards?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="6" data-a="a">A. They block sunlight</button>
+        <button class="choice" data-q="6" data-a="b">B. They reduce salinity</button>
+        <button class="choice" data-q="6" data-a="c">C. They act as natural wave barriers</button>
+        <button class="choice" data-q="6" data-a="d">D. They increase erosion</button>
+      </div>
+    </div>
+
+    <!-- Question 7 -->
+    <div class="question">
+      <p>7. A coastal village builds houses along the shore without natural barriers. After a storm, severe erosion occurs. Which human action increased the risk?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="7" data-a="a">A. Strengthening sea walls</button>
+        <button class="choice" data-q="7" data-a="b">B. Reducing wave energy</button>
+        <button class="choice" data-q="7" data-a="c">C. Increasing exposure to erosion</button>
+        <button class="choice" data-q="7" data-a="d">D. Stopping submersion</button>
+      </div>
+    </div>
+
+    <!-- Question 8 -->
+    <div class="question">
+      <p>8. A farmer near the sea finds his well water is salty in summer. What does this suggest about groundwater?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="8" data-a="a">A. Quality improves in summer</button>
+        <button class="choice" data-q="8" data-a="b">B. Freshwater is unfit for drinking</button>
+        <button class="choice" data-q="8" data-a="c">C. It causes tsunamis</button>
+        <button class="choice" data-q="8" data-a="d">D. It prevents erosion</button>
+      </div>
+    </div>
+
+    <!-- Question 9 -->
+    <div class="question">
+      <p>9. In Magsaysay, elders plant nipa palms along the shorelines as their ancestors did. What is the main benefit of this cultural practice?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="9" data-a="a">A. Preventing erosion and flooding</button>
+        <button class="choice" data-q="9" data-a="b">B. Logging</button>
+        <button class="choice" data-q="9" data-a="c">C. Overfishing</button>
+        <button class="choice" data-q="9" data-a="d">D. Sand mining</button>
+      </div>
+    </div>
+
+    <!-- Question 10 -->
+    <div class="question">
+      <p>10. Jeighna Grey lives near the coast where storm surges are stronger than in inland areas. Why are such coastal communities more at risk?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="10" data-a="a">A. Farther inland</button>
+        <button class="choice" data-q="10" data-a="b">B. Near mountains</button>
+        <button class="choice" data-q="10" data-a="c">C. Low elevation and proximity to sea</button>
+        <button class="choice" data-q="10" data-a="d">D. Stronger buildings</button>
+      </div>
+    </div>
+
+
+    <!-- Check Answers Button -->
+    <button class="check-answers-btn" id="checkAssessmentBtn">
+      Check Answers
+    </button>
+  </div>
+
+  <!-- Results -->
+  <div id="assessment-results" class="results-container">
+    <div class="score-display" id="assessment-score"></div>
+    <div id="assessment-details"></div>
+  </div>
+</section>
+
+<!-- Slide 24 - Lesson 2 -->
+<section class="slide _24" style="font-family: 'Arial Black', Gadget, sans-serif;">
+
+  <!-- Lesson Frame -->
+  <div class="text-frame lesson-frame" 
+       style="
+         background: #ffab2c; /* yellow-orange */
+         clip-path: polygon(0% 0%, 95% 0%, 100% 10%, 100% 90%, 95% 100%, 0% 100%, 0% 0%);
+         font-size: clamp(1.5rem, 5vw, 2em);
+         font-weight: bold;
+         padding: 0.5em 1em;
+         display: inline-block;
+         margin-top: 0.5em;
+       ">
+    Lesson 2
+  </div>
+
+  <!-- Slide Title -->
+  <div class="text-frame slide-title" 
+       style="
+         background: #ffe8b7; /* warm coffee color */
+         color: #000000;
+         font-size: clamp(2.5rem, 7vw, 3.5em); /* bigger title */
+         font-weight: bold;
+         padding: 1em;
+         margin-top: 1em;
+         border-radius: 0.5em;
+         text-align: center;
+         font-family: 'Arial Black', Gadget, sans-serif; /* system font */
+       ">
+    Mitigation to <br>Coastal Processes<br> and Hazards
+  </div>
+</section>
+<!-- Slide 25 - Module Overview -->
+<section class="slide _25" style="font-family: Arial, sans-serif; padding: 2em;">
+
+  <!-- Slide Content -->
+  <div class="text-frame slide-content" 
+       style="
+         background: #fff0d08e; /* warm coffee color */
+         color: #000000;
+         font-size: clamp(1rem, 3.5vw, 1.5em);
+         padding: 2em;
+         border-radius: 0.5em;
+         line-height: 1.5em;
+         text-align: left; /* left-align text */
+         white-space: pre-line; /* preserves line breaks */
+       ">
+    <strong>This module covers:</strong>
+    Lesson 1 – Effects of Marine and Coastal Processes
+
+    <strong>After completing this module, you are expected:</strong>
+    Lesson 1 – Mitigation to Coastal Processes and Hazards
+    <strong>Learning Competency:</strong> Cite ways to prevent or mitigate the impact of land development, waste disposal, and construction of structures that affect coastal processes.
+
+    <strong>Code:</strong> S11/12ES-Ii-41
+
+    By studying both science and LEK, you’ll discover practical ways to protect your coastal environment and help make your community more resilient to coastal hazards.
+  </div>
+</section>
+
+<!-- Slide 26 - Quiz Questions -->
+<section class="slide _26">
+  <div class="text-frame" style="background: rgba(255,255,255,0.8); font-size: clamp(1.5rem,5vw,1.8em); margin-top:0.5em;">
+    <strong>What I Know – Lesson 2</strong>
+  </div>
+  
+  <div class="text-frame zoom" style="background: rgba(255,231,123,0.8); font-size: clamp(1.2rem,4vw,1.5em); margin-top:0.3em;">
+    Choose and click the correct answer.
+  </div>
+
+  <div class="quiz-container">
+    <!-- Question 1 -->
+     <div class="question">
+      <p>1. Hemesha Mie observes that during high tides, seawater now reaches farther inland than before. What process does this suggest?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="1" data-a="a">A. Submersion</button>
+        <button class="choice" data-q="1" data-a="b">B. Coral reef growth</button>
+        <button class="choice" data-q="1" data-a="c">C. Saltwater reduction</button>
+        <button class="choice" data-q="1" data-a="d">D. Coastline expansion</button>
+      </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="question">
+      <p>2. Teacher Peter John compares two coastal communities: one with mangroves, one without. After a typhoon, the first suffers less damage. This suggests:</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="2" data-a="a">A. Mangroves reduce flooding and erosion risk</button>
+        <button class="choice" data-q="2" data-a="b">B. Mangroves cause flooding</button>
+        <button class="choice" data-q="2" data-a="c">C. The other town is higher in elevation</button>
+        <button class="choice" data-q="2" data-a="d">D. Flooding is random</button>
+      </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="question">
+      <p>3. Armilyn changes beach slope but keeps rainfall constant in her erosion experiment. What is the independent variable?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="3" data-a="a">A. Erosion rate</button>
+        <button class="choice" data-q="3" data-a="b">B. Type of sand</button>
+        <button class="choice" data-q="3" data-a="c">C. Beach slope</button>
+        <button class="choice" data-q="3" data-a="d">D. Sea level</button>
+      </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="question">
+      <p>4. In Barangay Bailan, salty water from wells is more frequent in the last five years. What does this imply about freshwater levels?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="4" data-a="a">A. Rising</button>
+        <button class="choice" data-q="4" data-a="b">B. Stable</button>
+        <button class="choice" data-q="4" data-a="c">C. Dropping</button>
+        <button class="choice" data-q="4" data-a="d">D. Increasing recharge</button>
+      </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="question">
+      <p>5. Elders in Barangay Abad Santos plant nipa and mangroves together. What is the likely reason?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="5" data-a="a">A. Economic value only</button>
+        <button class="choice" data-q="5" data-a="b">B. To confuse predators</button>
+        <button class="choice" data-q="5" data-a="c">C. To combine protective functions</button>
+        <button class="choice" data-q="5" data-a="d">D. To warm coastal water</button>
+      </div>
+    </div>
+
+    <!-- Question 6 -->
+    <div class="question">
+      <p>6. Fisherfolk say storm surges now reach farther inland than 20 years ago. Which hazard may be worsening?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="6" data-a="a">A. Coral growth</button>
+        <button class="choice" data-q="6" data-a="b">B. Saltwater intrusion</button>
+        <button class="choice" data-q="6" data-a="c">C. Erosion and submersion</button>
+        <button class="choice" data-q="6" data-a="d">D. Sediment build-up</button>
+      </div>
+    </div>
+
+    <!-- Question 7 -->
+    <div class="question">
+      <p>7. Which strategy best reduces coastal erosion?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="7" data-a="a">A. Highway tree planting</button>
+        <button class="choice" data-q="7" data-a="b">B. Mangrove reforestation</button>
+        <button class="choice" data-q="7" data-a="c">C. Building resorts</button>
+        <button class="choice" data-q="7" data-a="d">D. Concrete parks</button>
+      </div>
+    </div>
+
+    <!-- Question 8 -->
+    <div class="question">
+      <p>8. A coastal village builds houses along the shore without natural barriers. After a storm, severe erosion occurs. Which human action increased the risk?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="8" data-a="a">A. Strengthening sea walls</button>
+        <button class="choice" data-q="8" data-a="b">B. Reducing wave energy</button>
+        <button class="choice" data-q="8" data-a="c">C. Increasing exposure to erosion</button>
+        <button class="choice" data-q="8" data-a="d">D. Stopping submersion</button>
+      </div>
+    </div>
+
+    <!-- Question 9 -->
+    <div class="question">
+      <p>9. A farmer near the sea finds his well water is salty in summer. What does this suggest about groundwater?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="9" data-a="a">A. Quality improves in summer</button>
+        <button class="choice" data-q="9" data-a="b">B. Freshwater is unfit for drinking</button>
+        <button class="choice" data-q="9" data-a="c">C. It causes tsunamis</button>
+        <button class="choice" data-q="9" data-a="d">D. It prevents erosion</button>
+      </div>
+    </div>
+
+    <!-- Question 10 -->
+    <div class="question">
+      <p>10. In Magsaysay, elders plant nipa palms along the shorelines as their ancestors did. What is the main benefit of this cultural practice?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="10" data-a="a">A. Preventing erosion and flooding</button>
+        <button class="choice" data-q="10" data-a="b">B. Logging</button>
+        <button class="choice" data-q="10" data-a="c">C. Overfishing</button>
+        <button class="choice" data-q="10" data-a="d">D. Sand mining</button>
+      </div>
+    </div>
+
+    <!-- Question 11 -->
+    <div class="question">
+      <p>11. Jeighna Grey lives near the coast where storm surges are stronger than in inland areas. Why are such coastal communities more at risk?</p>
+      <div class="choices-grid">
+        <button class="choice" data-q="11" data-a="a">A. Farther inland</button>
+        <button class="choice" data-q="11" data-a="b">B. Near mountains</button>
+        <button class="choice" data-q="11" data-a="c">C. Low elevation and proximity to sea</button>
+        <button class="choice" data-q="11" data-a="d">D. Stronger buildings</button>
+      </div>
+    </div>
+
+    <button class="check-answers-btn" id="checkAnswersBtn">Check All Answers</button>
+  </div>
+
+  <!-- Results Container -->
+  <div id="results-container-26" class="results-container">
+    <div class="score-display" id="score-display-26"></div>
+    <div id="results-details-26"></div>
+  </div>
+</section>
+<!-- Slide 27 - Mitigation to Coastal Processes and Hazards -->
+<section class="slide _27">
+  <!-- Image -->
+  <div class="image-frame" style="text-align: center; margin-top: 1.5em;">
+    <img src="images/figure12.png" alt="Mitigation to Coastal Processes" style="max-width: 95%; height: auto; border-radius: 10px; box-shadow: 0 6px 8px rgba(0,0,0,0.25);">
+  </div>
+
+  <!-- Title below image -->
+  <div class="text-frame" style="background: rgba(213, 168, 255, 0.85); color: rgb(0, 0, 0); font-size: clamp(1.8rem, 5vw, 2.2em); font-weight: bold; text-align: center; margin: 1.5em auto; padding: 1em; border-radius: 10px;">
+    Mitigation to Coastal Processes and Hazards
+  </div>
+</section>
+
+<section class="slide _28">
+  <div class="text-frame" style="background: rgba(255, 235, 211, 0.281); color: #000; font-size: clamp(1.2rem, 1.8vw, 1.6em); line-height: 1.6; margin: 1.5em auto; padding: 2em; border-radius: 12px;">
+    
+    Coastal areas have long been preferred places for settlement because they offer rich fishing grounds, fertile land for farming, and easy access for trade and transport. Many coastal communities, especially in the Philippines, have developed traditional ways of living that are closely tied to the sea—such as fishing seasons guided by the moon and local wind patterns, or farming methods that adjust to the tides. These forms of local ecological knowledge have helped communities thrive and adapt to changing coastal conditions. However, as population and development continue to rise in these areas—now home to about 1.2 billion people worldwide, and expected to reach up to 5.2 billion by the 2080s—the pressure on coastal ecosystems and traditional practices also increases. With growing infrastructure and urban expansion, maintaining balance between development and the preservation of local knowledge becomes more important than ever.
+  </div>
+</section>
+<section class="slide _29">
+  <div class="text-frame" style="background: rgba(255, 235, 211, 0.281); color: #000; font-size: clamp(1.2rem, 1.8vw, 1.6em); line-height: 1.6; margin: 1.5em auto; padding: 2em; border-radius: 12px;">
+    The characteristics of coastal environments, however, bring great challenges to human habitation. Coastlines are dynamic systems where land, sea, and air interact, causing continuous changes in shape and stability. Through generations, many coastal communities have learned to observe and interpret these natural signs—such as changes in wave patterns, wind direction, and the behavior of marine species—to anticipate storms or erosion. This local ecological knowledge has helped them adapt to their environment and reduce risks. Yet, in many places, modern development has overlooked these traditional insights. As a result, communities have suffered from disasters linked to coastal hazards like storm surges and flooding. Today, coastal development often continues with limited consideration of these risks, even as climate change intensifies them. Moreover, human activities such as overfishing, mangrove clearing, and land reclamation disturb the natural balance of coastal ecosystems, threatening both biodiversity and local livelihoods that depend on them.
+  </div>
+</section>
+<!-- Slide 30 - Coastal Ecosystems and Hazards -->
+<section class="slide _30">
+  <div class="text-frame" style="background: rgba(255, 235, 211, 0.281); color: #000; font-size: clamp(1.2rem, 1.8vw, 1.6em); line-height: 1.6; margin: 1.5em auto; padding: 2em; border-radius: 12px;">
+    According to the Department of Environment and Natural Resources (DENR), the coastal ecosystems of the Philippines are among the most productive in the world and hold vast natural resources. They provide food, livelihood, and cultural identity to many Filipinos, especially those who depend on fishing, seaweed farming, and mangrove gathering. Local communities have long practiced traditional ways of managing these resources—such as seasonal fishing, mangrove replanting, and the protection of breeding areas—to sustain their environment. However, these same coastal zones are also the most geologically active on Earth. Natural processes such as erosion, submersion, and saltwater intrusion often occur here, bringing potential hazards to both people and their surroundings. These effects may lead to the following hazards:
+  </div>
+</section>
+
+
+<!-- Slide 31 - Coastal Hazards -->
+<section class="slide _31">
+  <div class="text-frame" style="background: rgba(255, 235, 211, 0.281); color: #000; font-size: clamp(1.1rem, 1.6vw, 1.5em); line-height: 1.6; margin: 1.5em auto; padding: 2em; border-radius: 12px; text-align: left;">
+    <strong>1. Barrier Island Movement</strong><br>
+    Barrier islands form from sand deposits that protect the mainland from strong waves and serve as habitats for marine life. Over time, erosion and storms can move or destroy them. Local fishers often observe these changes through shifting sandbars and wave patterns, showing their knowledge of the coast’s natural behavior.<br><br>
+
+    <strong>2. Flooding</strong><br>
+    Flooding damages habitats and causes erosion. Locals often link it to rising sea levels and stronger tides. Through experience, they observe signs like higher high tides or saltwater reaching farther inland—traditional knowledge that helps them prepare for climate-related changes.<br><br>
+
+    <strong>3. Freshwater Contamination</strong><br>
+    Saltwater intrusion can mix with groundwater, making wells and drinking sources unsafe. Locals often notice this when their water tastes salty or crops near the shore start to wilt. They link it to overpumping and land changes, showing how local knowledge helps detect early signs of contamination.
+  </div>
+</section>
+
+<section class="slide _32">
+  <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.2rem, 1.8vw, 1.5em); margin: 1em auto; padding: 1.5em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>Activity 1</strong><br>
+    <em>Drag and drop the correct words or phrases from the choices above to complete the table.</em>
+  </div>
+
+  <div class="choices-container" style="margin: 1em 0; display: flex; flex-wrap: wrap; gap: 0.7em;">
+    <div class="draggable" draggable="true" style="padding:0.5em 1em; background: #FFB6C1; color:#000; border-radius:8px; cursor:grab;">Waves</div>
+    <div class="draggable" draggable="true" style="padding:0.5em 1em; background: #87CEFA; color:#000; border-radius:8px; cursor:grab;">Climate change</div>
+    <div class="draggable" draggable="true" style="padding:0.5em 1em; background: #90EE90; color:#000; border-radius:8px; cursor:grab;">Habitat destruction, severe erosion</div>
+    <div class="draggable" draggable="true" style="padding:0.5em 1em; background: #FFD700; color:#000; border-radius:8px; cursor:grab;">Saltwater intrusion, human activity</div>
+    <div class="draggable" draggable="true" style="padding:0.5em 1em; background: #FF8C00; color:#000; border-radius:8px; cursor:grab;">Loss of wildlife habitat</div>
+    <div class="draggable" draggable="true" style="padding:0.5em 1em; background: #BA55D3; color:#000; border-radius:8px; cursor:grab;">Erosion, storms</div>
+    <div class="draggable" draggable="true" style="padding:0.5em 1em; background: #00CED1; color:#000; border-radius:8px; cursor:grab;">Sea level change</div>
+  </div>
+
+  <table style="width: 95%; border-collapse: collapse; text-align: left; color: #000; font-size: 0.9em; margin-left: auto; margin-right: auto;">
+    <thead>
+      <tr style="background: #8a2be2; color: #000;">
+        <th style="padding: 0.5em; border: 1px solid #000;">Hazard</th>
+        <th style="padding: 0.5em; border: 1px solid #000;">Responsible Coastal Processes</th>
+        <th style="padding: 0.5em; border: 1px solid #000;">Causes</th>
+        <th style="padding: 0.5em; border: 1px solid #000;">Effects</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: 0.5em; border: 1px solid #000;">1. Barrier island movement</td>
+        <td class="dropzone" data-answer="Erosion, storms" style="padding: 0.5em; border: 1px solid #000; min-height:2em;"></td>
+        <td class="dropzone" data-answer="Waves" style="padding: 0.5em; border: 1px solid #000; min-height:2em;"></td>
+        <td class="dropzone" data-answer="Habitat destruction, severe erosion" style="padding: 0.5em; border: 1px solid #000; min-height:2em;"></td>
+      </tr>
+      <tr>
+        <td style="padding: 0.5em; border: 1px solid #000;">2. Flooding</td>
+        <td class="dropzone" data-answer="Sea level change, Climate change" style="padding: 0.5em; border: 1px solid #000; min-height:2em; "data-locked="true">Sea level rise, storm surges</td>
+        <td class="dropzone" data-answer="Sea level change" style="padding: 0.5em; border: 1px solid #000; min-height:2em;"></td>
+        <td class="dropzone" data-answer="Loss of wildlife habitat" style="padding: 0.5em; border: 1px solid #000; min-height:2em;"></td>
+      </tr>
+      <tr>
+        <td style="padding: 0.5em; border: 1px solid #000;">3. Freshwater contamination</td>
+        <td class="dropzone" data-answer="Saltwater intrusion, human activity" style="padding: 0.5em; border: 1px solid #000; min-height:2em;"></td>
+        <td class="dropzone" data-answer="Saltwater intrusion, human activity" style="padding: 0.5em; border: 1px solid #000; min-height:2em;"></td>
+        <td class="dropzone" data-answer="Unsafe drinking water, crop damage" style="padding: 0.5em; border: 1px solid #000; min-height:2em;" data-locked="true">Unsafe drinking water, crop damage</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button id="checkBtn" style="margin-top:1em; padding:0.5em 1em;">Check Answers</button>
+  <div id="scoreDisplay" style="margin-top:0.5em; font-weight:bold; color: #000;"></div>
+
+</section>
+<section class="slide _33">
+  <!-- Slide Title -->
+  <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.2rem, 1.8vw, 1.5em); margin: 1em auto; padding: 1.5em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>What's In: Activity 2 – Local Coastal Hazards</strong>
+    <br>
+    <em>Directions: Read each statement and answer the question below it. Write your answers in one or two sentences only.</em>
+  </div>
+
+  <!-- Question 1 -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1rem, 1.5vw, 1.2em); padding: 1em; border-radius: 8px; background: #f0f0f0; color: #000;">
+    <strong>1. Many people in coastal areas plant mangroves.</strong>
+    <br>→ Why do they do this?
+  </div>
+
+  <!-- User answer textbox -->
+  <textarea id="answer1" placeholder="Type your answer here..." 
+            style="width: 95%; margin: 0.5em auto; display: block; min-height: 5em; padding: 0.5em; font-size: 1em; border-radius: 8px; border: 1px solid #000; resize: vertical;"></textarea>
+
+</section>
+
+<section class="slide _34">
+  <!-- Slide Title -->
+  <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.2rem, 1.8vw, 1.5em); margin: 1em auto; padding: 1.5em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>What's In: Activity 2 – Local Coastal Hazards</strong>
+    <br>
+    <em>Directions: Read each statement and answer the question below it. Write your answers in one or two sentences only.</em>
+  </div>
+
+  <!-- Question 2 -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1rem, 1.5vw, 1.2em); padding: 1em; border-radius: 8px; background: #f0f0f0; color: #000;">
+    <strong>2. In some places, houses near the sea are built on stilts or higher ground.</strong>
+    <br>→ How does this help during high tide or flooding?
+  </div>
+
+  <!-- User answer textbox -->
+  <textarea id="answer2" placeholder="Type your answer here..." 
+            style="width: 95%; margin: 0.5em auto; display: block; min-height: 5em; padding: 0.5em; font-size: 1em; border-radius: 8px; border: 1px solid #000; resize: vertical;"></textarea>
+
+</section>
+
+<section class="slide _35">
+  <!-- Slide Title -->
+  <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.2rem, 1.8vw, 1.5em); margin: 1em auto; padding: 1.5em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>What's In: Activity 2 – Local Coastal Hazards</strong>
+    <br>
+    <em>Directions: Read each statement and answer the question below it. Write your answers in one or two sentences only.</em>
+  </div>
+
+  <!-- Question 3 -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1rem, 1.5vw, 1.2em); padding: 1em; border-radius: 8px; background: #f0f0f0; color: #000;">
+    <strong>3. Fisherfolk often notice muddy water after a storm.</strong>
+    <br>→ What coastal process causes this?
+  </div>
+
+  <!-- User answer textbox -->
+  <textarea id="answer3" placeholder="Type your answer here..." 
+            style="width: 95%; margin: 0.5em auto; display: block; min-height: 5em; padding: 0.5em; font-size: 1em; border-radius: 8px; border: 1px solid #000; resize: vertical;"></textarea>
+
+</section>
+
+<section class="slide _36">
+  <!-- Slide Title -->
+  <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.2rem, 1.8vw, 1.5em); margin: 1em auto; padding: 1.5em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>What's New: Activity 3 – My Community’s Way</strong>
+    <br>
+    <em>Directions: Answer the questions based on what you see or know about your coastal area.</em>
+  </div>
+
+  <!-- Question 1 -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1rem, 1.5vw, 1.2em); padding: 1em; border-radius: 8px; background: #f0f0f0; color: #000;">
+    <strong>1. How does your community protect the shoreline (example: mangroves, rocks, bamboo fences, etc.)?</strong>
+  </div>
+
+  <!-- User answer textbox 1 -->
+  <textarea id="answer36_1" placeholder="Type your answer here..." 
+            style="width: 95%; margin: 0.5em auto; display: block; min-height: 5em; padding: 0.5em; font-size: 1em; border-radius: 8px; border: 1px solid #000; resize: vertical;"></textarea>
+
+  <!-- Question 2 -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1rem, 1.5vw, 1.2em); padding: 1em; border-radius: 8px; background: #f0f0f0; color: #000;">
+    <strong>2. What do you think is the difference between these local ways and man-made structures like seawalls or breakwaters?</strong>
+  </div>
+
+  <!-- User answer textbox 2 -->
+  <textarea id="answer36_2" placeholder="Type your answer here..." 
+            style="width: 95%; margin: 0.5em auto; display: block; min-height: 5em; padding: 0.5em; font-size: 1em; border-radius: 8px; border: 1px solid #000; resize: vertical;"></textarea>
+
+  <!-- Question 3 -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1rem, 1.5vw, 1.2em); padding: 1em; border-radius: 8px; background: #f0f0f0; color: #000;">
+    <strong>3. Which one do you think is better for both people and marine life? Explain shortly.</strong>
+  </div>
+
+  <!-- User answer textbox 3 -->
+  <textarea id="answer36_3" placeholder="Type your answer here..." 
+            style="width: 95%; margin: 0.5em auto; display: block; min-height: 5em; padding: 0.5em; font-size: 1em; border-radius: 8px; border: 1px solid #000; resize: vertical;"></textarea>
+
+</section>
+<section class="slide _37">
+  <!-- Slide Title -->
+    <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>What is It</strong>
+  </div>
+
+  <!-- Content -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1.1rem, 1.7vw, 1.3em); padding: 1.5em; border-radius: 8px; background: #f0f0f0; color: #000; line-height: 1.6;">
+    Coastal hazard-prone areas in the Philippines, especially those identified by local government units as highly susceptible to landslides and flooding, are encouraged to relocate residents to safer places. This is most important during typhoons that often bring storm surges and strong waves. While some coastal hazards are natural, local people have observed that certain human activities—such as cutting mangroves, improper waste disposal, and building too close to the shore—make these hazards worse.
+
+    <br><br>
+
+    Through community experience and traditional knowledge, locals have learned simple but effective ways to protect coastal zones, such as replanting mangroves, building bamboo or stone barriers, and observing early signs of flooding from changes in tides and wind direction. These local practices, combined with scientific methods, strengthen mitigation efforts. Mitigation means taking actions that reduce or prevent the long-term risks and damages caused by coastal hazards.
+  </div>
+</section>
+<section class="slide _38">
+  <!-- Slide Title -->
+    <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>What is It</strong>
+  </div>
+
+  <!-- Content -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1.1rem, 1.7vw, 1.3em); padding: 1.5em; border-radius: 8px; background: #f0f0f0; color: #000; line-height: 1.6;text-align: left;">
+    <strong>Mitigation Methods</strong><br> <br>
+    • <strong>Seawalls</strong> – These are used to counteract waves that hit the shores. These are offshore structures that protect coasts from parallel waves.<br>
+    • <strong>Groins / Stone barriers</strong> – It intercepts the steady flow of sand and keeps the particular sand from eroding.<br>
+    • <strong>Breakwaters</strong> – It can be constructed along coasts to prevent further advancement of saltwater if already present.<br>
+    • <strong>Beach nourishment</strong> – It is a method where a large amount of sand is added to the coasts.<br>
+    • <strong>Installation of small walls or sandbags</strong> – These are used to counteract waves that hit the shores.<br>
+    • <strong>Beach dewatering</strong> – It involves pumping out water from the shores to prevent erosion.<br>
+    • <strong>Construction of buildings at a safe distance from the water</strong>.<br>
+    • <strong>Ban of mining activities</strong> – This can cause a decrease in pollutants.
+  </div>
+</section>
+<section class="slide _39">
+  <!-- Slide Title -->
+  <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>What is It</strong>
+  </div>
+
+  <!-- Content -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1.1rem, 1.7vw, 1.3em); padding: 1.5em; border-radius: 8px; background: #f0f0f0; color: #000; line-height: 1.6; text-align: left;">
+    <strong>Mitigation Methods</strong><br> <br>
+    • <strong>Maintaining plant cover</strong> – This can result to improved vegetation<br>
+    • <strong>Monitoring and assessment</strong> - It ensures effective management of saltwater intrusion cases.<br>
+    • <strong>Regulation of Laws</strong><br>
+    • <strong>Artificial recharge</strong> – It pumps freshwater to the reservoir to prevent saltwater from intruding through the coasts.<br>
+    • <strong>Engineering structures</strong>.<br>
+    • <strong>Jetties</strong> – It prevent coastal erosion by promoting beach build-up as they trap sand.<br>
+    • Prepare and emergency survival kit<br>
+    • Create an evacuation plan.<br>
+    • Know where the evacuation center is and how to get there.<br>
+    • Listen to news from any means.
+  </div>
+</section>
+<section class="slide _40">
+  <!-- Slide Title -->
+  <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>What is It</strong>
+  </div>
+
+  <!-- Content -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1.1rem, 1.7vw, 1.3em); padding: 1.5em; border-radius: 8px; background: #f0f0f0; color: #000; line-height: 1.6; text-align: left;">
+    Coastal ecosystems are rich in natural resources and provide many people with food and livelihood, especially in fishing and tourism. Because of their beauty, many businesses develop near the shore, but this often disturbs the natural balance. Locals have long observed that when mangroves are cut or sand is taken from the beach, erosion and saltwater intrusion become worse.<br><br>
+    Erosion happens when strong waves and storms remove sand and soil from the coast. To protect their communities, locals and the government build seawalls, groins, or breakwaters. However, these can sometimes harm natural habitats and prevent sand from returning to the shore. Many coastal communities now combine traditional practices like replanting mangroves and using bamboo barriers with scientific methods to lessen erosion and flooding.
+  </div>
+</section>
+
+<section class="slide _41">
+  <!-- Slide Title -->
+  <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>What is It</strong>
+  </div>
+
+  <!-- Content -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1.1rem, 1.7vw, 1.3em); padding: 1.5em; border-radius: 8px; background: #f0f0f0; color: #000; line-height: 1.6; text-align: left;">
+    <strong>Global Warming and Coastal Processes</strong><br><br>
+    Global warming affects coastal processes such as sea level rise and erosion. When the Earth’s temperature increases, ice from the polar regions melts, causing the sea to rise. This leads to stronger waves, frequent flooding, and saltwater intrusion in coastal areas.<br><br>
+    In many coastal communities in the Philippines, locals have noticed that tides are getting higher and storms are becoming stronger than in the past. These changes damage homes, crops, and fishing areas. Through experience, people have learned to adapt—by building raised houses, planting mangroves, and joining community cleanups to protect the coast. These local practices, combined with scientific actions, help lessen the effects of global warming on coastal environments.
+  </div>
+</section>
+<section class="slide _43">
+  <!-- Slide Title -->
+  <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>What’s New</strong>
+  </div>
+
+  <!-- Directions -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1.05rem, 1.6vw, 1.2em); padding: 1em; border-radius: 8px; background: #f0f0f0; color: #000; line-height: 1.6; text-align: left;">
+    <strong>Directions:</strong> Interview one elder, fisherman, or coastal resident in your community. Ask them:
+  </div>
+
+  <!-- Questions with text boxes -->
+  <div class="text-frame" style="margin: 1em auto; font-size: clamp(1.05rem, 1.6vw, 1.2em); padding: 1em; border-radius: 8px; background: #f9f9f9; color: #000; line-height: 1.6; text-align: left;">
+    <ul style="padding-left: 1.5em;">
+      <li>
+        How do they protect the coast during storms or high tides?<br>
+        <textarea style="width: 95%; margin-top: 0.3em; padding: 0.5em; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+      </li><br>
+      <li>
+        What changes have they noticed in the shoreline through the years?<br>
+        <textarea style="width: 95%; margin-top: 0.3em; padding: 0.5em; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+      </li><br>
+      <li>
+        What traditional practices help lessen coastal damage?<br>
+        <textarea style="width: 95%; margin-top: 0.3em; padding: 0.5em; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+      </li>
+    </ul>
+  </div>
+</section>
+<section class="slide _44">
+  <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
+    <strong>What’s New</strong>
+  </div>
+
+  <!-- Directions -->
+  <div class="text-frame" style="
+    font-size: clamp(1.05rem, 1.6vw, 1.2em);
+    padding: 1.2em;
+    border-radius: 8px;
+    background: #f0f0f0;
+    color: #000;
+    line-height: 1.6;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+  ">
+    <strong>Directions:</strong> Imagine you are part of your barangay’s Disaster Risk Reduction Team. Propose one simple community project that combines LEK and science to reduce coastal hazards (e.g., mangrove planting, waste segregation, shoreline monitoring). Write your short plan below:
+  </div>
+
+  <!-- Project Form (FULL WIDTH) -->
+  <div class="text-frame" style="
+    font-size: clamp(1.05rem, 1.6vw, 1.2em);
+    padding: 1.5em;
+    border-radius: 8px;
+    background: #f9f9f9;
+    color: #000;
+    line-height: 1.6;
+    text-align: left;
+    width: 100%;
+    margin: 1em 0;
+  ">
+    <ul style="padding-left: 1.5em;">
+      <li>
+        Project Title:<br>
+        <input type="text" style="width: 100%; padding: 0.6em; border-radius: 6px; border: 1px solid #ccc;">
+      </li><br>
+
+      <li>
+        Objective:<br>
+        <input type="text" style="width: 100%; padding: 0.6em; border-radius: 6px; border: 1px solid #ccc;">
+      </li><br>
+
+      <li>
+        Materials Needed:<br>
+        <input type="text" style="width: 100%; padding: 0.6em; border-radius: 6px; border: 1px solid #ccc;">
+      </li><br>
+
+      <li>
+        Steps to Implement:<br>
+        <input type="text" style="width: 100%; padding: 0.6em; border-radius: 6px; border: 1px solid #ccc;">
+      </li><br>
+
+      <li>
+        Expected Outcome:<br>
+        <input type="text" style="width: 100%; padding: 0.6em; border-radius: 6px; border: 1px solid #ccc;">
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide _45">
+  <!-- Slide Title -->
+  <div class="text-frame" style="
+    background: rgba(138,43,226,0.1);
+    font-size: clamp(1.1rem, 1.5vw, 1.3em);
+    margin: 1em auto;
+    padding: 1.2em;
+    border-radius: 12px;
+    text-align: left;
+    color: #000;
+  ">
+    <strong>What I Have Learned</strong>
+  </div>
+
+  <!-- Instruction -->
+  <div class="text-frame" style="
+    font-size: clamp(1.05rem, 1.6vw, 1.2em);
+    padding: 1em;
+    border-radius: 8px;
+    background: #f0f0f0;
+    color: #000;
+    text-align: left;
+    margin-bottom: 1em;
+  ">
+    <strong>Answer briefly:</strong>
+  </div>
+
+  <!-- Questions -->
+  <div class="text-frame" style="
+    font-size: clamp(1.05rem, 1.6vw, 1.2em);
+    padding: 1.5em;
+    border-radius: 8px;
+    background: #f9f9f9;
+    color: #000;
+    text-align: left;
+    width: 100%;
+  ">
+    <ol style="padding-left: 1.5em;">
+      <li>
+        What are the three main human activities that affect coastal processes?<br>
+        <input type="text" style="width:100%; padding:0.6em; border-radius:6px; border:1px solid #ccc;">
+      </li><br>
+
+      <li>
+        How can local knowledge complement scientific approaches in coastal protection?<br>
+        <input type="text" style="width:100%; padding:0.6em; border-radius:6px; border:1px solid #ccc;">
+      </li><br>
+
+      <li>
+        Why should the community be involved in coastal management programs?<br>
+        <input type="text" style="width:100%; padding:0.6em; border-radius:6px; border:1px solid #ccc;">
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="slide _46">
+  <!-- Slide Title -->
+  <div class="text-frame"
+    style="background: rgba(138,43,226,0.1);
+           font-size: clamp(1.2rem, 2vw, 1.4em);
+           margin: 1em auto;
+           padding: 1.2em;
+           border-radius: 12px;
+           text-align: center;
+           color: #000;">
+    <strong>ASSESSMENT</strong>
+  </div>
+
+  <!-- Questions -->
+  <div class="text-frame"
+    style="margin: 1em auto;
+           font-size: clamp(1rem, 1.6vw, 1.2em);
+           padding: 1.5em;
+           border-radius: 12px;
+           background: #f0f0f0;
+           color: #000;
+           line-height: 1.6;
+           text-align: left;
+           max-width: 900px;">
+
+    <ol>
+
+      <li>
+        Hemesha Mie observes that during high tides, seawater now reaches farther inland than before. What process does this suggest?<br>
+        <label><input type="radio" name="q1" value="A"> A. Submersion</label><br>
+        <label><input type="radio" name="q1" value="B"> B. Coral reef growth</label><br>
+        <label><input type="radio" name="q1" value="C"> C. Saltwater reduction</label><br>
+        <label><input type="radio" name="q1" value="D"> D. Coastline expansion</label>
+        <div class="correct-answer" data-answer="A" style="display:none;">✅ Correct Answer: <strong>A. Submersion</strong></div>
+      </li><br>
+
+      <li>
+        Teacher Peter John compares two coastal communities: one with mangroves, one without. After a typhoon, the first suffers less damage. This suggests:<br>
+        <label><input type="radio" name="q2" value="A"> A. Mangroves reduce flooding and erosion risk</label><br>
+        <label><input type="radio" name="q2" value="B"> B. Mangroves cause flooding</label><br>
+        <label><input type="radio" name="q2" value="C"> C. The other town is higher in elevation</label><br>
+        <label><input type="radio" name="q2" value="D"> D. Flooding is random</label>
+        <div class="correct-answer" data-answer="A" style="display:none;">✅ Correct Answer: <strong>A</strong></div>
+      </li><br>
+
+      <li>
+        Armilyn changes beach slope but keeps rainfall constant in her erosion experiment. What is the independent variable?<br>
+        <label><input type="radio" name="q3" value="A"> A. Erosion rate</label><br>
+        <label><input type="radio" name="q3" value="B"> B. Type of sand</label><br>
+        <label><input type="radio" name="q3" value="C"> C. Beach slope</label><br>
+        <label><input type="radio" name="q3" value="D"> D. Sea level</label>
+        <div class="correct-answer" data-answer="C" style="display:none;">✅ Correct Answer: <strong>C</strong></div>
+      </li><br>
+
+      <li>
+        In Barangay Bailan, salty water from wells is more frequent in the last five years. What does this imply about freshwater levels?<br>
+        <label><input type="radio" name="q4" value="A"> A. Rising</label><br>
+        <label><input type="radio" name="q4" value="B"> B. Stable</label><br>
+        <label><input type="radio" name="q4" value="C"> C. Dropping</label><br>
+        <label><input type="radio" name="q4" value="D"> D. Increasing recharge</label>
+        <div class="correct-answer" data-answer="C" style="display:none;">✅ Correct Answer: <strong>C</strong></div>
+      </li><br>
+
+      <li>
+        Elders in barangay Abad Santos plant nipa and mangroves together. What is the likely reason?<br>
+        <label><input type="radio" name="q5" value="A"> A. Economic value only</label><br>
+        <label><input type="radio" name="q5" value="B"> B. To confuse predators</label><br>
+        <label><input type="radio" name="q5" value="C"> C. To combine protective functions</label><br>
+        <label><input type="radio" name="q5" value="D"> D. To warm coastal water</label>
+        <div class="correct-answer" data-answer="C" style="display:none;">✅ Correct Answer: <strong>C</strong></div>
+      </li><br>
+
+      <li>
+        Fisherfolk say storm surges now reach farther inland than 20 years ago. Which hazard may be worsening?<br>
+        <label><input type="radio" name="q6" value="A"> A. Coral growth</label><br>
+        <label><input type="radio" name="q6" value="B"> B. Saltwater intrusion</label><br>
+        <label><input type="radio" name="q6" value="C"> C. Erosion and submersion</label><br>
+        <label><input type="radio" name="q6" value="D"> D. Sediment build-up</label>
+        <div class="correct-answer" data-answer="C" style="display:none;">✅ Correct Answer: <strong>C</strong></div>
+      </li><br>
+
+      <li>
+        Which strategy best reduces coastal erosion?<br>
+        <label><input type="radio" name="q7" value="A"> A. Highway tree planting</label><br>
+        <label><input type="radio" name="q7" value="B"> B. Mangrove reforestation</label><br>
+        <label><input type="radio" name="q7" value="C"> C. Building resorts</label><br>
+        <label><input type="radio" name="q7" value="D"> D. Concrete parks</label>
+        <div class="correct-answer" data-answer="B" style="display:none;">✅ Correct Answer: <strong>B</strong></div>
+      </li><br>
+
+      <li>
+        A farmer near the sea finds his well water is salty in summer. What does this suggest about groundwater?<br>
+        <label><input type="radio" name="q8" value="A"> A. Quality improves in summer</label><br>
+        <label><input type="radio" name="q8" value="B"> B. Freshwater is unfit for drinking</label><br>
+        <label><input type="radio" name="q8" value="C"> C. Saltwater intrusion occurs</label><br>
+        <label><input type="radio" name="q8" value="D"> D. It prevents erosion</label>
+        <div class="correct-answer" data-answer="C" style="display:none;">✅ Correct Answer: <strong>C</strong></div>
+      </li><br>
+
+      <li>
+        In Magsaysay, elders plant nipa palms along the shorelines as their ancestors did. What is the main benefit of this cultural practice?<br>
+        <label><input type="radio" name="q9" value="A"> A. Preventing erosion and flooding</label><br>
+        <label><input type="radio" name="q9" value="B"> B. Logging</label><br>
+        <label><input type="radio" name="q9" value="C"> C. Overfishing</label><br>
+        <label><input type="radio" name="q9" value="D"> D. Sand mining</label>
+        <div class="correct-answer" data-answer="A" style="display:none;">✅ Correct Answer: <strong>A</strong></div>
+      </li><br>
+
+      <li>
+        Jeighna Grey lives near the coast where storm surges are stronger than inland areas. Why are such coastal communities more at risk?<br>
+        <label><input type="radio" name="q10" value="A"> A. Farther inland</label><br>
+        <label><input type="radio" name="q10" value="B"> B. Near mountains</label><br>
+        <label><input type="radio" name="q10" value="C"> C. Low elevation and proximity to sea</label><br>
+        <label><input type="radio" name="q10" value="D"> D. Stronger buildings</label>
+        <div class="correct-answer" data-answer="C" style="display:none;">✅ Correct Answer: <strong>C</strong></div>
+      </li>
+
+    </ol>
+
+    <!-- Button & Score -->
+    <button id="checkAnswersBtn46"
+      style="margin-top:1em;
+             padding:0.8em;
+             width:100%;
+             max-width:320px;
+             border:none;
+             border-radius:8px;
+             background:#8a2be2;
+             color:#fff;
+             font-size:1em;">
+      Check Answers
+    </button>
+
+    <div id="scoreDisplay46"
+      style="margin-top:1em;
+             font-weight:bold;
+             color:#000;"></div>
+
+  </div>
+</section>
+
+
+<section class="slide _47">
+
+  <div class="text-frame" style="margin-top: 1em; text-align: left; font-size: clamp(0.9rem, 2.5vw, 1.1em);">
+
+    <strong>A. Books and Journals</strong><br><br>
+
+    Mukhopadhyay, A., Dasgupta, R., Hazra, S., &amp; Mitra, D. 2012.
+    <em>Coastal Hazards and Vulnerability: A Review.</em>
+    International Journal of Geology, Earth and Environmental Sciences. 2(1). pp. 57–69.
+    <br><br>
+
+    Millennium Ecosystem Assessment. 2005.
+    <em>Ecosystems and Human Well-Being: Synthesis.</em>
+    Washington, DC: Island Press.
+    <br><br>
+
+    <strong>B. Electronic References</strong><br><br>
+
+    https://cbartazo.com/tag/siargao-island/
+    <br><br>
+
+    https://www.philstar.com/nation/2013/07/02/960479/mgb-coastal-erosion-caused-zambales-beach-collapse#y7lBoIebBQxOyi5H.99
+    <br><br>
+
+    https://www.ooskanews.com/southern-eastern-asia/saltwater-intrusion-threatening-potable-water-supplies-philippines
+    <br><br>
+
+    Department of Environment and Natural Resources, et.al.
+    <em>Managing Impacts of Development in Coastal Zone</em>,
+    (Philippines: Coastal Management Project of Department of Environment and Natural Resources, 2001)
+    https://faspselib.denr.gov.ph
+    <br><br>
+
+    Kotsoni, A., Dimelli, D., &amp; Ragia, L.
+    <em>Land Use Planning for Sustainable Development of Coastal Regions</em>
+    (Greece: 2017)
+    https://www.researchgate.net/publication/316867706
+    <br><br>
+
+    Pawlukiewicz, M., Gupta, P., and Koelbel, C.
+    <em>Ten Principles for Coastal Development.</em>
+    Washington, D.C.: ULI–the Urban Land Institute, 2007.
+    https://uli.org/uploads/
+    <br><br>
+
+    https://www.encyclopedia.com/<br>
+    Access: February 23, 2019
+
+  </div>
+</section>
+
+
+
+</div>
+
+
+</div>
+
+    <!-- Slide Navigation at Bottom -->
+    <div class="slide-nav">
+      <span class="slide-counter">Slide <span id="current-slide">1</span> of <span id="total-slides">14</span></span>
+      <div class="controls">
+        <button id="prev-btn" aria-label="Previous slide">◀ Prev</button>
+        <button id="next-btn" aria-label="Next slide">Next ▶</button>
+      </div>
+    </div>
+  </div>
+
+<script> 
+
+
+
+
+const activityBtn = document.getElementById("checkActivityBtn");
+
+function showAssessmentResults() {
+  const resultsContainer = document.getElementById('assessment-results');
+  const scoreBox = document.getElementById('assessment-score');
+  const detailsBox = document.getElementById('assessment-details');
+
+  let score = 0;
+  let summary = "";
+
+  for (let q in assessmentCorrectAnswers) {
+    const isCorrect = assessmentAnswers[q] === assessmentCorrectAnswers[q];
+    if (isCorrect) score++;
+
+    summary += `
+      <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
+        Question ${q}: ${isCorrect ? '✅ Correct' : '❌ Incorrect'}
+        ${!isCorrect ? `(Correct answer: ${assessmentCorrectAnswers[q].toUpperCase()})` : ''}
+      </div>
+    `;
+  }
+
+  scoreBox.innerHTML = `You scored ${score} out of ${Object.keys(assessmentCorrectAnswers).length} (${Math.round(score / Object.keys(assessmentCorrectAnswers).length * 100)}%)`;
+  detailsBox.innerHTML = summary;
+
+  resultsContainer.classList.add('show');
+  resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+
+function handleAssessmentCheck(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  showAssessmentResults();
+}
+
+
+
+  function handleActivityCheck(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    checkActivityAnswers();
+  }
+
+  activityBtn.addEventListener("click", handleActivityCheck);
+  activityBtn.addEventListener("touchend", handleActivityCheck, { passive: false });
+    const checkBtn = document.getElementById("checkAnswersBtn");
+
+  function handleCheckAnswers(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    showResults();
+  }
+  const assessmentSlideIndex = 13;
+  checkBtn.addEventListener("click", handleCheckAnswers);
+  checkBtn.addEventListener("touchend", handleCheckAnswers, { passive: false });
+ document.addEventListener("pointerdown", function (e) {
+  const btn = e.target.closest(".choice");
+  if (!btn) return;
+
+  const q = btn.dataset.q;
+  const a = btn.dataset.a;
+
+  const slide = btn.closest('section.slide');
+
+  if (slide.classList.contains('_6')) {
+    selectAnswer(q, a, btn);
+  } 
+  if (slide.classList.contains('_23')) {
+    // Store the answer
+    assessmentAnswers[q] = a;
+
+    // Highlight selection
+    const parent = btn.parentNode;
+    parent.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+   if (slide.classList.contains('_26')) {
+    selectAnswer26(q, a, btn); // Lesson 2
+  }
+}, { passive: false });
+
+
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const testSlideIndex = 5; // Index of the test slide (0-based)
+    const activitySlideIndex = 9; // Index of the activity slide (0-based)
+    let testCompleted = false;
+    let activityCompleted = false;
+
+    document.addEventListener('DOMContentLoaded', function() {
+  // Handle touch events for buttons and interactive elements
+  const checkAssessmentBtn = document.getElementById("checkAssessmentBtn");
+  const interactiveElements = document.querySelectorAll('button, .choice, .case-button');
+  checkAssessmentBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    showAssessmentResults();
+  });
+
+  checkAssessmentBtn.addEventListener("touchend", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    showAssessmentResults();
+  }, { passive: false });
+  interactiveElements.forEach(element => {
+    // Add touch feedback
+    /*element.addEventListener('touchstart', function(e) {
+      this.classList.add('touching');
+      e.preventDefault(); // Prevent default touch behavior
+    }, { passive: false });*/
+    element.addEventListener('touchstart', function() {
+      this.classList.add('touching');
+    });
+    
+    element.addEventListener('touchend', function(e) {
+      this.classList.remove('touching');
+      e.preventDefault(); // Prevent default touch behavior
+    }, { passive: false });
+    
+    element.addEventListener('touchcancel', function(e) {
+      this.classList.remove('touching');
+    });
+    
+    // Ensure buttons work properly with touch events
+    if (element.tagName === 'BUTTON') {
+      element.addEventListener('click', function(e) {
+        // Reset any active states
+        document.querySelectorAll('.touching').forEach(el => {
+          el.classList.remove('touching');
+        });
+      });
+    }
+  });
+  
+  // Handle slide navigation with touch
+  const slideNav = document.querySelector('.slide-nav');
+  if (slideNav) {
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    slideNav.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    slideNav.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+    
+    function handleSwipe() {
+      if (touchEndX < touchStartX - 50) {
+        // Swipe left - next slide
+        console.log('Swipe left detected');
+      }
+      if (touchEndX > touchStartX + 50) {
+        // Swipe right - previous slide
+        console.log('Swipe right detected');
+      }
+    }
+  }
+});
+    const next = document.getElementById("next-btn");
+    const prev = document.getElementById("prev-btn");
+
+    next.addEventListener("click", nextSlide);
+    prev.addEventListener("click", prevSlide);
+
+    // mobile-safe
+    next.addEventListener("touchstart", nextSlide, { passive: true });
+    prev.addEventListener("touchstart", prevSlide, { passive: true });
+    
+    // DOM elements
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    
+    // Update slide counter
+    document.getElementById('total-slides').textContent = totalSlides;
+
+    // Initialize slide counter
+    function updateSlideCounter() {
+      document.getElementById('current-slide').textContent = current + 1;
+    }
+    function selectAssessmentAnswer(questionNumber, choice, btn) {
+    assessmentAnswers[questionNumber] = choice;
+
+    // Remove highlight from siblings
+    const parent = btn.parentNode;
+    parent.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
+
+    // Highlight selected
+    btn.classList.add('selected');
+    }
+
+    function showSlide(index) {
+      slides.forEach((s, i) => {
+        s.classList.toggle('active', i === index);
+      });
+      current = index; // ✅ update current here
+      updateSlideCounter();
+      
+      // Check if we're on the test slide
+      if (index === testSlideIndex) {
+        checkTestCompletion();
+      } else if (index === activitySlideIndex) {
+        // Check if activity is completed
+        if (!activityCompleted) {
+          disableNextButton();
+        }
+      } else {
+        // Enable navigation if not on test/activity slide or they're completed
+        enableNavigation();
+      }
+    }
+
+    function nextSlide() {
+      if (current < slides.length - 1) {
+        // Check if we're trying to leave the test slide
+        if (current === testSlideIndex && !testCompleted) {
+          return; // Don't proceed
+        }
+        
+        // Check if we're trying to leave the activity slide
+        if (current === activitySlideIndex && !activityCompleted) {
+          return; // Don't proceed
+        }
+        
+        current++;
+        showSlide(current);
+      }
+    }
+
+    function prevSlide() {
+      if (current > 0) {
+        current--;
+        showSlide(current);
+      }
+    }
+
+    function checkTestCompletion() {
+      // Check if all questions have been answered
+      const totalQuestions = 10;
+      const answeredQuestions = Object.keys(userAnswers).length;
+      
+      if (answeredQuestions === totalQuestions) {
+        testCompleted = true;
+        enableNavigation();
+      } else {
+        disableNextButton();
+      }
+    }
+
+    function checkActivityAnswers() {
+      const correctAnswers = {
+        answer1: "TIDES",
+        answer2: "WAVES",
+        answer3: "SEA LEVEL RISE",
+        answer4: "EARTHQUAKE",
+        answer5: "STORM SURGES"
+      };
+      
+      const inputs = document.querySelectorAll('.answer-input');
+      let correctCount = 0;
+      let totalQuestions = inputs.length;
+      let allAnswered = true;
+      
+      // Check if all inputs have been filled
+      inputs.forEach(input => {
+        if (input.value.trim() === '') {
+          allAnswered = false;
+        }
+      });
+      
+      if (!allAnswered) {
+        const feedback = document.getElementById('activity-feedback');
+        feedback.className = "activity-feedback error";
+        feedback.textContent = "❌ Please answer all questions before checking.";
+        return;
+      }
+      
+      // Process each answer
+      inputs.forEach((input, index) => {
+        const inputId = `answer${index + 1}`;
+        const userAnswer = input.value.trim().toUpperCase();
+        const correctAnswer = correctAnswers[inputId];
+        const feedbackDiv = document.getElementById(`feedback${index + 1}`);
+        
+        // Remove previous classes
+        input.classList.remove('correct', 'incorrect');
+        
+        if (userAnswer === correctAnswer) {
+          input.classList.add('correct');
+          correctCount++;
+          // For correct answers, show "Correct!" with a checkmark
+          feedbackDiv.innerHTML = `<span class="correct-answer">✅ Correct!</span>`;
+        } else {
+          input.classList.add('incorrect');
+          // For incorrect answers, show the correct answer
+          feedbackDiv.innerHTML = `<span class="correct-answer-only">Correct Answer: ${correctAnswer}</span>`;
+        }
+      });
+      
+      const feedback = document.getElementById('activity-feedback');
+      
+      if (correctCount === totalQuestions) {
+        feedback.className = "activity-feedback success";
+        feedback.innerHTML = `🎉 Congratulations! All answers are correct. You may now proceed to the next slide.`;
+        activityCompleted = true;
+        enableNavigation();
+      } else {
+        feedback.className = "activity-feedback partial";
+        feedback.innerHTML = `✅ You got ${correctCount} out of ${totalQuestions} answers correct. You may now proceed to the next slide.`;
+        // Enable navigation even if some answers are wrong
+        activityCompleted = true;
+        enableNavigation();
+      }
+    }
+
+    function disableNextButton() {
+      nextBtn.disabled = true;
+      nextBtn.textContent = 'Complete First';
+    }
+
+    function enableNavigation() {
+      nextBtn.disabled = false;
+      nextBtn.textContent = 'Next ▶';
+    }
+
+    // Store user answers
+    let userAnswers = {};
+    
+    // CORRECTED ANSWER KEY
+    const correctAnswers = { 
+      1: 'c',  // Wave action (not earthquakes)
+      2: 'a',  // Submersion (not saltwater intrusion)
+      3: 'c',  // Wave buoy (not thermometer)
+      4: 'c',  // Saltwater intrusion (not eutrophication)
+      5: 'b',  // Strong and constant wave energy (not frequent earthquakes)
+      6: 'c',  // They act as natural wave barriers (not reduce salinity)
+      7: 'c',  // Increasing exposure to erosion (not strengthening sea walls)
+      8: 'c',  // It indicates saltwater intrusion (not freshwater is unfit)
+      9: 'a',  // Preventing erosion and flooding (not logging)
+      10: 'c'  // Low elevation and proximity to sea (not farther inland)
+    };
+
+        // ===== ASSESSMENT (Slide 23) =====
+     let assessmentAnswers = {}; // stores user selections
+      const assessmentCorrectAnswers = {
+      1: 'c',  // Wave action
+      2: 'a',  // Submersion
+      3: 'c',  // Wave buoy
+      4: 'c',  // Saltwater intrusion
+      5: 'b',  // Strong and constant wave energy
+      6: 'c',  // Natural wave barriers
+      7: 'c',  // Increasing exposure to erosion
+      8: 'b',  // Freshwater is unfit for drinking
+      9: 'a',  // Preventing erosion and flooding
+      10: 'c'  // Low elevation and proximity to sea
+      };
+      const correctAnswers26 = {
+      1: 'a',
+      2: 'a',
+      3: 'c',
+      4: 'c',
+      5: 'c',
+      6: 'c',
+      7: 'b',
+      8: 'c',
+      9: 'a',
+      10: 'c',
+      11: 'c'
+      };
+
+
+    let userAnswers26 = {};
+
+    function selectAnswer26(questionNumber, choice, btn) {
+      userAnswers26[questionNumber] = choice;
+      btn.parentNode.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+    function selectAnswer(questionNumber, choice, btn) {
+      // Store answer
+      userAnswers[questionNumber] = choice;
+
+      // Remove highlight from other buttons in same question
+      const parent = btn.parentNode;
+      parent.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
+
+      // Highlight the clicked button
+      btn.classList.add('selected');
+      
+      // Check if test is completed when on test slide
+      if (current === testSlideIndex) {
+        checkTestCompletion();
+      }
+    }
+    const checkBtn26 = document.querySelector('section._26 #checkAnswersBtn');
+    checkBtn26.addEventListener('click', () => showResults26());
+    checkBtn26.addEventListener('touchend', () => showResults26(), { passive: false });
+
+    function showResults26() {
+    let score = 0;
+    let summary = "";
+    const total = Object.keys(correctAnswers26).length;
+
+    for (let q in correctAnswers26) {
+      const isCorrect = userAnswers26[q] === correctAnswers26[q];
+      if (isCorrect) score++;
+
+      summary += `
+        <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
+          Question ${q}: ${isCorrect ? '✅ Correct' : '❌ Incorrect'}
+          ${!isCorrect ? `(Correct answer: ${correctAnswers26[q].toUpperCase()})` : ''}
+        </div>
+      `;
+    }
+
+    // Use the unique IDs for Slide 26
+    document.getElementById('score-display-26').innerHTML = `You scored ${score} out of ${total} (${Math.round(score/total*100)}%)`;
+    document.getElementById('results-details-26').innerHTML = summary;
+    document.getElementById('results-container-26').classList.add('show');
+
+    // Scroll to the results
+    document.getElementById('results-container-26').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+    function showResults() {
+      let score = 0;
+      let total = Object.keys(correctAnswers).length;
+      let summary = "";
+
+      // Create results container
+      const resultsContainer = document.getElementById('results-container');
+      const scoreDisplay = document.getElementById('score-display');
+      const resultsDetails = document.getElementById('results-details');
+
+      // Calculate score and prepare results
+      for (let q in correctAnswers) {
+        const isCorrect = userAnswers[q] === correctAnswers[q];
+        if (isCorrect) score++;
+        
+        summary += `
+          <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
+            Question ${q}: ${isCorrect ? '✅ Correct' : '❌ Incorrect'} 
+            ${!isCorrect ? `(Correct answer: ${correctAnswers[q].toUpperCase()})` : ''}
+          </div>
+        `;
+      }
+
+      // Display results
+      scoreDisplay.innerHTML = `You scored ${score} out of ${total} (${Math.round((score/total)*100)}%)`;
+      resultsDetails.innerHTML = summary;
+      resultsContainer.classList.add('show');
+
+      // Mark test as completed
+      testCompleted = true;
+      enableNavigation();
+      
+      // Scroll to results
+      resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Initialize
+    showSlide(0);
+  </script>
+
+<script>
+(() => {
+  const draggables = document.querySelectorAll('.draggable');
+  const dropzones = document.querySelectorAll('.dropzone');
+  const scoreDisplay = document.getElementById('scoreDisplay');
+
+  // Initialize dropzones: store user input separately and lock pre-filled
+  dropzones.forEach(zone => {
+    if(zone.dataset.locked === "true"){
+      zone.dataset.user = zone.textContent.trim(); // pre-filled answer
+    } else {
+      zone.dataset.user = zone.textContent.trim();
+    }
+  });
+  
+
+  // Drag & Drop
+  draggables.forEach(drag => {
+    drag.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', e.target.textContent);
+    });
+  });
+
+  dropzones.forEach(zone => {
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+      if(zone.dataset.locked !== "true") zone.style.background = 'rgba(138,43,226,0.2)';
+    });
+
+    zone.addEventListener('dragleave', () => {
+      if(zone.dataset.locked !== "true") zone.style.background = '#f0f0f0';
+    });
+
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      if(zone.dataset.locked === "true") return; // cannot change pre-filled
+      const text = e.dataTransfer.getData('text/plain');
+      zone.dataset.user = text; // store user input
+      zone.textContent = text;
+
+      // Remove old indicator
+      const oldInd = zone.querySelector('.indicator');
+      if(oldInd) oldInd.remove();
+
+      zone.style.background = '#f0f0f0';
+    });
+  });
+
+  // Check Answers
+  const checkBtn = document.getElementById('checkBtn');
+
+const checkFn = () => {
+  let correctCount = 0;
+
+  // Count all dropzones that are NOT locked — this is the total number of answers to check
+  const totalAnswers = Array.from(dropzones).filter(z => z.dataset.locked !== "true").length;
+
+  dropzones.forEach(zone => {
+    // Skip locked/pre-filled cells
+    if(zone.dataset.locked === "true") return;
+
+    // Get user answer (ignore previous indicators)
+    const userAnswer = (zone.dataset.user || zone.textContent || '').trim();
+    if(!userAnswer) return; // Skip empty cells
+
+    // Remove old indicator
+    const oldInd = zone.querySelector('.indicator');
+    if(oldInd) oldInd.remove();
+
+    const correctAnswer = zone.dataset.answer;
+
+    if(userAnswer === correctAnswer){
+      zone.style.background = '#90EE90';
+      const check = document.createElement('span');
+      check.className = 'indicator';
+      check.textContent = '✅';
+      check.style.fontWeight = 'bold';
+      check.style.marginLeft = '0.5em';
+      zone.appendChild(check);
+      correctCount++;
+    } else {
+      zone.style.background = '#FFB6C1';
+      const check = document.createElement('span');
+      check.className = 'indicator';
+      check.textContent = '❌ (' + correctAnswer + ')';
+      check.style.fontWeight = 'bold';
+      check.style.marginLeft = '0.5em';
+      zone.appendChild(check);
+    }
+  });
+
+  // Show score: correct / total blank (non-locked) answers
+  scoreDisplay.textContent = `Score: ${correctCount} / ${totalAnswers}`;
+};
+
+
+// Support both click and touch
+checkBtn.addEventListener('click', checkFn);
+checkBtn.addEventListener('touchend', e => {
+  e.preventDefault(); // prevent double firing
+  checkFn();
+});
+
+})();
+</script>
+
+<script>
+// Use a new variable name to avoid conflicts
+var checkBtn46 = document.getElementById("checkAnswersBtn46");
+
+var checkFn46 = () => {
+  const correct = {
+    q1:"A", q2:"A", q3:"C", q4:"C", q5:"C",
+    q6:"C", q7:"B", q8:"C", q9:"A", q10:"C"
+  };
+
+  let score = 0;
+
+  Object.keys(correct).forEach(q => {
+    const radios = document.querySelectorAll(`input[name="${q}"]`);
+    const selected = document.querySelector(`input[name="${q}"]:checked`);
+    const questionItem = radios[0].closest("li");
+
+    // Remove old indicators
+    const oldIndicator = questionItem.querySelector(".result-indicator");
+    if (oldIndicator) oldIndicator.remove();
+
+    // Create indicator
+    const indicator = document.createElement("div");
+    indicator.className = "result-indicator";
+    indicator.style.marginTop = "6px";
+    indicator.style.fontWeight = "bold";
+
+    if (!selected) return; // skip if unanswered
+
+    if (selected.value === correct[q]) {
+      indicator.innerHTML = "✔ Correct";
+      indicator.style.color = "green";
+      score++;
+    } else {
+      indicator.innerHTML = `✖ Wrong — Correct answer: <strong>${correct[q]}</strong>`;
+      indicator.style.color = "red";
+    }
+
+    questionItem.appendChild(indicator);
+  });
+
+  // Show score
+  document.getElementById("scoreDisplay46").textContent =
+    `Your Score: ${score} / 10`;
+
+
+};
+
+// Attach to both click and touchend for mobile
+checkBtn46.addEventListener("click", checkFn46);
+checkBtn46.addEventListener("touchend", e => {
+  e.preventDefault(); // prevent double firing
+  checkFn46();
+});
+</script>
+
+
+
+</body>
+</html>

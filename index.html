@@ -309,17 +309,17 @@
       background-color: #ff6b6b;
     }
     .slide._23 {
-      background: url("images/Frame8.png") no-repeat center center;
+      background: url("images/Frame7.png") no-repeat center center;
       background-size: cover;
       background-color: #ff6b6b;
     }
     .slide._24 {
-      background: url("images/Frame9.png") no-repeat center center;
+      background: url("images/Frame8.png") no-repeat center center;
       background-size: cover;
       background-color: #ff6b6b;
     }
     .slide._25 {
-      background: url("images/Frame8.png") no-repeat center center;
+      background: url("images/Frame9.png") no-repeat center center;
       background-size: cover;
       background-color: #ff6b6b;
     }
@@ -329,16 +329,16 @@
       background-color: #ff6b6b;
     }
     .slide._27 {
+      background: url("images/Frame8.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._28 {
       background: url("images/Frame10.png") no-repeat center center;
       background-size: cover;
       background-color: #ff6b6b;
     }
-     .slide._28 {
-      background: url("images/Frame11.png") no-repeat center center;
-      background-size: cover;
-      background-color: #ff6b6b;
-    }
-    .slide._29 {
+     .slide._29 {
       background: url("images/Frame11.png") no-repeat center center;
       background-size: cover;
       background-color: #ff6b6b;
@@ -403,12 +403,12 @@
       background-size: cover;
       background-color: #ff6b6b;
     }
-     .slide._42 {
+    .slide._42 {
       background: url("images/Frame11.png") no-repeat center center;
       background-size: cover;
       background-color: #ff6b6b;
     }
-    .slide._43 {
+     .slide._43 {
       background: url("images/Frame11.png") no-repeat center center;
       background-size: cover;
       background-color: #ff6b6b;
@@ -424,11 +424,16 @@
       background-color: #ff6b6b;
     }
     .slide._46 {
-      background: url("images/Frame4.png") no-repeat center center;
+      background: url("images/Frame11.png") no-repeat center center;
       background-size: cover;
       background-color: #ff6b6b;
     }
     .slide._47 {
+      background: url("images/Frame4.png") no-repeat center center;
+      background-size: cover;
+      background-color: #ff6b6b;
+    }
+    .slide._48 {
       background: url("images/refImage.png") no-repeat center center;
       background-size: cover;
       background-color: #ff6b6b;
@@ -987,6 +992,43 @@ button:active:not(:disabled),
       <div class="text-frame zoom" style="background: var(--frame-bg); font-size: clamp(1.2rem, 4vw, 1.8em);">
         <strong>Contextualized for Siargao Island <br> (Sta. Monica, Surigao del Norte)</strong>
       </div>
+  <label for="studentName" style="display:block; margin-bottom: 8px;color:rgb(0, 0, 0);">
+    <strong>Student Name <span style="color:rgb(255, 0, 0)">*</span></strong>
+  </label>
+
+  <input
+    id="studentName"
+    type="text"
+    placeholder="Enter your full name"
+    style="
+
+      width: 100%;
+      max-width: 420px;
+      padding: 12px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      border: 2px solid #000000;
+      text-align: center;
+    "
+  />
+
+  <div
+    id="nameError"
+    style="
+      border: 2px solid #000000;
+      background-color: #fff3cd; /* light warning yellow */
+      color: rgb(0, 0, 0);
+      font-size: 0.95em;
+      margin-top: 6px;
+      padding: 6px;
+      display: none;
+      border-radius: 4px;
+    "
+>
+    ⚠ Please enter your name to continue.
+</div>
+
+      
     </section>
 
     <!-- Slide 2 -->
@@ -1385,26 +1427,26 @@ button:active:not(:disabled),
 
 
     <section class="slide _18" style="padding: 2% 3%; box-sizing: border-box;">
-  <!-- Slide Title -->
-  <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
-    What's New
-  </div>
+      <!-- Slide Title -->
+      <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
+        What's New
+      </div>
 
-  <!-- Directions -->
-  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; padding: 0.5em; border-radius: 4px; margin-bottom: 1em;">
-    <strong>Directions:</strong> Look at the pictures presented below. Describe how prone or vulnerable the places are to coastal hazards such as erosion, storm surge, flooding, or saltwater intrusion. Use both what you know from science and what local people in Siargao observe or experience. Write your answers in at least two sentences each.
-  </div>
+      <!-- Directions -->
+      <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; padding: 0.5em; border-radius: 4px; margin-bottom: 1em;">
+        <strong>Directions:</strong> Look at the pictures presented below. Describe how prone or vulnerable the places are to coastal hazards such as erosion, storm surge, flooding, or saltwater intrusion. Use both what you know from science and what local people in Siargao observe or experience. Write your answers in at least two sentences each.
+      </div>
 
-  <!-- Image -->
-  <div style="text-align: center; margin-bottom: 1em;">
-    <img src="images/imageTest1.png" alt="Coastal area" style="max-width: 100%; height: auto; border-radius: 6px;">
-  </div>
+      <!-- Image -->
+      <div style="text-align: center; margin-bottom: 1em;">
+        <img src="images/imageTest1.png" alt="Coastal area" style="max-width: 100%; height: auto; border-radius: 6px;">
+      </div>
 
-  <!-- Answer Box -->
-  <div style="margin-bottom: 1em;">
-    <textarea placeholder="Write your answer here..." style="width: 100%; min-height: 120px; padding: 0.5em; font-size: 1rem; border: 2px solid #ccc; border-radius: 6px; resize: vertical;"></textarea>
-  </div>
-</section>
+      <!-- Answer Box -->
+      <div style="margin-bottom: 1em;">
+        <textarea placeholder="Write your answer here..." style="width: 100%; min-height: 120px; padding: 0.5em; font-size: 1rem; border: 2px solid #ccc; border-radius: 6px; resize: vertical;"></textarea>
+      </div>
+  </section>
 <section class="slide _19" style="padding: 2% 3%; box-sizing: border-box;">
   <!-- Slide Title -->
   <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
@@ -1548,15 +1590,27 @@ button:active:not(:disabled),
     }
   </style>
 </section>
-<section class="slide _22" style="padding: 2% 3%; box-sizing: border-box;">
+
+<section class="slide _23" style="padding: 2% 3%; box-sizing: border-box;">
   <!-- Slide Title -->
   <div class="text-frame" style="font-size: clamp(1.2rem, 4vw, 1.5em); font-weight: bold; background: rgba(255,255,255,0.9); padding: 0.2em 0.4em; border-radius: 4px; margin-bottom: 0.8em; text-align: left;">
-    What I Can Do
+    What I can do
   </div>
 
   <!-- Activity Directions -->
   <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); background: rgba(255,255,255,0.9); text-align: left; padding: 0.5em; border-radius: 4px; margin-bottom: 1em;">
-    <strong>Directions:</strong> As a Senior High School student, explain how you can help the local government lessen or prevent the harmful effects of coastal and marine processes such as coastal erosion, submersion, and saltwater intrusion, especially if your community is prone to these hazards. Write your answer in 3 to 5 sentences.
+    <strong>Directions:</strong> 
+    As a Senior High School student, explain how you can help the local government lessen or prevent the harmful effects of coastal and marine processes such as coastal erosion, submersion, and saltwater intrusion, especially if your community is prone to these hazards. Write your answer in 3 to 5 sentences.
+  </div>
+
+  <!-- Question Frame -->
+  <div class="text-frame zoom" style="font-size: clamp(1rem, 3vw, 1.4em); 
+                                      background: #FFF8C6; /* soft yellow */ 
+                                      text-align: left; 
+                                      padding: 0.5em; 
+                                      border-radius: 4px; 
+                                      margin-bottom: 1em;">
+    <strong>1. Why is it important to study coastal and marine processes?</strong>
   </div>
 
   <!-- Answer Box with lined paper -->
@@ -1581,14 +1635,15 @@ button:active:not(:disabled),
 
   <!-- Placeholder color CSS -->
   <style>
-    .slide._22 .answer-box::placeholder {
+    .slide._23 .answer-box::placeholder {
       color: red;
       opacity: 1; /* ensures visibility */
     }
   </style>
 </section>
-<!-- Slide 23 - ASSESSMENT -->
-<section class="slide _23">
+
+<!-- Slide 24 - ASSESSMENT -->
+<section class="slide _24">
   <!-- Title -->
   <div class="text-frame" style="background: rgba(255, 255, 255, 0.8); font-size: clamp(1.5rem, 5vw, 1.8em); margin-top: 0.5em;">
     <strong>ASSESSMENT</strong>
@@ -1723,8 +1778,8 @@ button:active:not(:disabled),
   </div>
 </section>
 
-<!-- Slide 24 - Lesson 2 -->
-<section class="slide _24" style="font-family: 'Arial Black', Gadget, sans-serif;">
+<!-- Slide 25 - Lesson 2 -->
+<section class="slide _25" style="font-family: 'Arial Black', Gadget, sans-serif;">
 
   <!-- Lesson Frame -->
   <div class="text-frame lesson-frame" 
@@ -1756,8 +1811,8 @@ button:active:not(:disabled),
     Mitigation to <br>Coastal Processes<br> and Hazards
   </div>
 </section>
-<!-- Slide 25 - Module Overview -->
-<section class="slide _25" style="font-family: Arial, sans-serif; padding: 2em;">
+<!-- Slide 26 - Module Overview -->
+<section class="slide _26" style="font-family: Arial, sans-serif; padding: 2em;">
 
   <!-- Slide Content -->
   <div class="text-frame slide-content" 
@@ -1784,8 +1839,8 @@ button:active:not(:disabled),
   </div>
 </section>
 
-<!-- Slide 26 - Quiz Questions -->
-<section class="slide _26">
+<!-- Slide 27 - Quiz Questions -->
+<section class="slide _27">
   <div class="text-frame" style="background: rgba(255,255,255,0.8); font-size: clamp(1.5rem,5vw,1.8em); margin-top:0.5em;">
     <strong>What I Know – Lesson 2</strong>
   </div>
@@ -1920,13 +1975,13 @@ button:active:not(:disabled),
   </div>
 
   <!-- Results Container -->
-  <div id="results-container-26" class="results-container">
-    <div class="score-display" id="score-display-26"></div>
-    <div id="results-details-26"></div>
+  <div id="results-container-27" class="results-container">
+    <div class="score-display" id="score-display-27"></div>
+    <div id="results-details-27"></div>
   </div>
 </section>
-<!-- Slide 27 - Mitigation to Coastal Processes and Hazards -->
-<section class="slide _27">
+<!-- Slide 28 - Mitigation to Coastal Processes and Hazards -->
+<section class="slide _28">
   <!-- Image -->
   <div class="image-frame" style="text-align: center; margin-top: 1.5em;">
     <img src="images/figure12.png" alt="Mitigation to Coastal Processes" style="max-width: 95%; height: auto; border-radius: 10px; box-shadow: 0 6px 8px rgba(0,0,0,0.25);">
@@ -1938,19 +1993,19 @@ button:active:not(:disabled),
   </div>
 </section>
 
-<section class="slide _28">
+<section class="slide _29">
   <div class="text-frame" style="background: rgba(255, 235, 211, 0.281); color: #000; font-size: clamp(1.2rem, 1.8vw, 1.6em); line-height: 1.6; margin: 1.5em auto; padding: 2em; border-radius: 12px;">
     
     Coastal areas have long been preferred places for settlement because they offer rich fishing grounds, fertile land for farming, and easy access for trade and transport. Many coastal communities, especially in the Philippines, have developed traditional ways of living that are closely tied to the sea—such as fishing seasons guided by the moon and local wind patterns, or farming methods that adjust to the tides. These forms of local ecological knowledge have helped communities thrive and adapt to changing coastal conditions. However, as population and development continue to rise in these areas—now home to about 1.2 billion people worldwide, and expected to reach up to 5.2 billion by the 2080s—the pressure on coastal ecosystems and traditional practices also increases. With growing infrastructure and urban expansion, maintaining balance between development and the preservation of local knowledge becomes more important than ever.
   </div>
 </section>
-<section class="slide _29">
+<section class="slide _30">
   <div class="text-frame" style="background: rgba(255, 235, 211, 0.281); color: #000; font-size: clamp(1.2rem, 1.8vw, 1.6em); line-height: 1.6; margin: 1.5em auto; padding: 2em; border-radius: 12px;">
     The characteristics of coastal environments, however, bring great challenges to human habitation. Coastlines are dynamic systems where land, sea, and air interact, causing continuous changes in shape and stability. Through generations, many coastal communities have learned to observe and interpret these natural signs—such as changes in wave patterns, wind direction, and the behavior of marine species—to anticipate storms or erosion. This local ecological knowledge has helped them adapt to their environment and reduce risks. Yet, in many places, modern development has overlooked these traditional insights. As a result, communities have suffered from disasters linked to coastal hazards like storm surges and flooding. Today, coastal development often continues with limited consideration of these risks, even as climate change intensifies them. Moreover, human activities such as overfishing, mangrove clearing, and land reclamation disturb the natural balance of coastal ecosystems, threatening both biodiversity and local livelihoods that depend on them.
   </div>
 </section>
 <!-- Slide 30 - Coastal Ecosystems and Hazards -->
-<section class="slide _30">
+<section class="slide _31">
   <div class="text-frame" style="background: rgba(255, 235, 211, 0.281); color: #000; font-size: clamp(1.2rem, 1.8vw, 1.6em); line-height: 1.6; margin: 1.5em auto; padding: 2em; border-radius: 12px;">
     According to the Department of Environment and Natural Resources (DENR), the coastal ecosystems of the Philippines are among the most productive in the world and hold vast natural resources. They provide food, livelihood, and cultural identity to many Filipinos, especially those who depend on fishing, seaweed farming, and mangrove gathering. Local communities have long practiced traditional ways of managing these resources—such as seasonal fishing, mangrove replanting, and the protection of breeding areas—to sustain their environment. However, these same coastal zones are also the most geologically active on Earth. Natural processes such as erosion, submersion, and saltwater intrusion often occur here, bringing potential hazards to both people and their surroundings. These effects may lead to the following hazards:
   </div>
@@ -1958,7 +2013,7 @@ button:active:not(:disabled),
 
 
 <!-- Slide 31 - Coastal Hazards -->
-<section class="slide _31">
+<section class="slide _32">
   <div class="text-frame" style="background: rgba(255, 235, 211, 0.281); color: #000; font-size: clamp(1.1rem, 1.6vw, 1.5em); line-height: 1.6; margin: 1.5em auto; padding: 2em; border-radius: 12px; text-align: left;">
     <strong>1. Barrier Island Movement</strong><br>
     Barrier islands form from sand deposits that protect the mainland from strong waves and serve as habitats for marine life. Over time, erosion and storms can move or destroy them. Local fishers often observe these changes through shifting sandbars and wave patterns, showing their knowledge of the coast’s natural behavior.<br><br>
@@ -1971,7 +2026,7 @@ button:active:not(:disabled),
   </div>
 </section>
 
-<section class="slide _32">
+<section class="slide _33">
   <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.2rem, 1.8vw, 1.5em); margin: 1em auto; padding: 1.5em; border-radius: 12px; text-align: left; color: #000;">
     <strong>Activity 1</strong><br>
     <em>Drag and drop the correct words or phrases from the choices above to complete the table.</em>
@@ -2022,7 +2077,7 @@ button:active:not(:disabled),
   <div id="scoreDisplay" style="margin-top:0.5em; font-weight:bold; color: #000;"></div>
 
 </section>
-<section class="slide _33">
+<section class="slide _34">
   <!-- Slide Title -->
   <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.2rem, 1.8vw, 1.5em); margin: 1em auto; padding: 1.5em; border-radius: 12px; text-align: left; color: #000;">
     <strong>What's In: Activity 2 – Local Coastal Hazards</strong>
@@ -2042,7 +2097,7 @@ button:active:not(:disabled),
 
 </section>
 
-<section class="slide _34">
+<section class="slide _35">
   <!-- Slide Title -->
   <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.2rem, 1.8vw, 1.5em); margin: 1em auto; padding: 1.5em; border-radius: 12px; text-align: left; color: #000;">
     <strong>What's In: Activity 2 – Local Coastal Hazards</strong>
@@ -2062,7 +2117,7 @@ button:active:not(:disabled),
 
 </section>
 
-<section class="slide _35">
+<section class="slide _36">
   <!-- Slide Title -->
   <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.2rem, 1.8vw, 1.5em); margin: 1em auto; padding: 1.5em; border-radius: 12px; text-align: left; color: #000;">
     <strong>What's In: Activity 2 – Local Coastal Hazards</strong>
@@ -2082,7 +2137,7 @@ button:active:not(:disabled),
 
 </section>
 
-<section class="slide _36">
+<section class="slide _37">
   <!-- Slide Title -->
   <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.2rem, 1.8vw, 1.5em); margin: 1em auto; padding: 1.5em; border-radius: 12px; text-align: left; color: #000;">
     <strong>What's New: Activity 3 – My Community’s Way</strong>
@@ -2118,7 +2173,7 @@ button:active:not(:disabled),
             style="width: 95%; margin: 0.5em auto; display: block; min-height: 5em; padding: 0.5em; font-size: 1em; border-radius: 8px; border: 1px solid #000; resize: vertical;"></textarea>
 
 </section>
-<section class="slide _37">
+<section class="slide _38">
   <!-- Slide Title -->
     <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
     <strong>What is It</strong>
@@ -2133,7 +2188,7 @@ button:active:not(:disabled),
     Through community experience and traditional knowledge, locals have learned simple but effective ways to protect coastal zones, such as replanting mangroves, building bamboo or stone barriers, and observing early signs of flooding from changes in tides and wind direction. These local practices, combined with scientific methods, strengthen mitigation efforts. Mitigation means taking actions that reduce or prevent the long-term risks and damages caused by coastal hazards.
   </div>
 </section>
-<section class="slide _38">
+<section class="slide _39">
   <!-- Slide Title -->
     <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
     <strong>What is It</strong>
@@ -2152,7 +2207,7 @@ button:active:not(:disabled),
     • <strong>Ban of mining activities</strong> – This can cause a decrease in pollutants.
   </div>
 </section>
-<section class="slide _39">
+<section class="slide _40">
   <!-- Slide Title -->
   <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
     <strong>What is It</strong>
@@ -2173,7 +2228,7 @@ button:active:not(:disabled),
     • Listen to news from any means.
   </div>
 </section>
-<section class="slide _40">
+<section class="slide _41">
   <!-- Slide Title -->
   <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
     <strong>What is It</strong>
@@ -2186,7 +2241,7 @@ button:active:not(:disabled),
   </div>
 </section>
 
-<section class="slide _41">
+<section class="slide _42">
   <!-- Slide Title -->
   <div class="text-frame" style="background: rgba(138,43,226,0.1); font-size: clamp(1.1rem, 1.5vw, 1.3em); margin: 1em auto; padding: 1.2em; border-radius: 12px; text-align: left; color: #000;">
     <strong>What is It</strong>
@@ -2262,29 +2317,30 @@ button:active:not(:disabled),
   ">
     <ul style="padding-left: 1.5em;">
       <li>
-        Project Title:<br>
-        <input type="text" style="width: 100%; padding: 0.6em; border-radius: 6px; border: 1px solid #ccc;">
+         Project Title:<br>
+        <input id="slide44_title" type="text" style="width:100%; padding:0.6em;">
       </li><br>
 
       <li>
         Objective:<br>
-        <input type="text" style="width: 100%; padding: 0.6em; border-radius: 6px; border: 1px solid #ccc;">
+        <input id="slide44_objective" type="text" style="width:100%; padding:0.6em;">
       </li><br>
 
       <li>
         Materials Needed:<br>
-        <input type="text" style="width: 100%; padding: 0.6em; border-radius: 6px; border: 1px solid #ccc;">
+        <input id="slide44_materials" type="text" style="width:100%; padding:0.6em;">
       </li><br>
 
       <li>
         Steps to Implement:<br>
-        <input type="text" style="width: 100%; padding: 0.6em; border-radius: 6px; border: 1px solid #ccc;">
+        <input id="slide44_steps" type="text" style="width:100%; padding:0.6em;">
       </li><br>
 
       <li>
         Expected Outcome:<br>
-        <input type="text" style="width: 100%; padding: 0.6em; border-radius: 6px; border: 1px solid #ccc;">
+        <input id="slide44_outcome" type="text" style="width:100%; padding:0.6em;">
       </li>
+
     </ul>
   </div>
 </section>
@@ -2327,19 +2383,19 @@ button:active:not(:disabled),
     width: 100%;
   ">
     <ol style="padding-left: 1.5em;">
-      <li>
+     <li>
         What are the three main human activities that affect coastal processes?<br>
-        <input type="text" style="width:100%; padding:0.6em; border-radius:6px; border:1px solid #ccc;">
+        <input id="slide45_q1" type="text" style="width:100%; padding:0.6em;">
       </li><br>
 
       <li>
         How can local knowledge complement scientific approaches in coastal protection?<br>
-        <input type="text" style="width:100%; padding:0.6em; border-radius:6px; border:1px solid #ccc;">
+        <input id="slide45_q2" type="text" style="width:100%; padding:0.6em;">
       </li><br>
 
       <li>
         Why should the community be involved in coastal management programs?<br>
-        <input type="text" style="width:100%; padding:0.6em; border-radius:6px; border:1px solid #ccc;">
+        <input id="slide45_q3" type="text" style="width:100%; padding:0.6em;">
       </li>
     </ol>
   </div>
@@ -2484,6 +2540,10 @@ button:active:not(:disabled),
              color:#000;"></div>
 
   </div>
+  <div id="allSubmissionsContainer">
+  <h2>All Submissions</h2>
+  <div id="submissionsTable"></div>
+</div>
 </section>
 
 
@@ -2563,11 +2623,205 @@ button:active:not(:disabled),
   </div>
 
 <script> 
+let allUserData = {
+  studentName: "",
+  slide5_score: 0,
+  slide10_score: 0,
+  slide24_score: 0,
+  slide27_score: 0,
+  slide33_score: 0,
+  Slide46_score: 0,
 
+};
+setupMultiTextareaSlide(37);
+setupMultiTextareaSlide(43);
+setupMultiTextareaSlide(45);
+function setupMultiTextareaSlide(slideNumber) {
+  const slide = document.querySelector(`.slide._${slideNumber}`);
+  if (!slide) return;
+
+  const textareas = slide.querySelectorAll("textarea");
+  const key = `slide${slideNumber}Answers`;
+
+  // Initialize storage
+  if (!allUserData[key]) {
+    allUserData[key] = {};
+  }
+
+  textareas.forEach((textarea, index) => {
+    const answerKey = `answer${index + 1}`;
+
+    // Restore saved answer
+    if (allUserData[key][answerKey]) {
+      textarea.value = allUserData[key][answerKey];
+    }
+
+    // Save on input
+    textarea.addEventListener("input", () => {
+      allUserData[key][answerKey] = textarea.value.trim();
+    });
+  });
+}
+document.addEventListener("DOMContentLoaded", () => {
+
+  function saveSlide44() {
+    allUserData.slide44Answers = {
+      answer1: document.getElementById("slide44_title")?.value.trim() || "",
+      answer2: document.getElementById("slide44_objective")?.value.trim() || "",
+      answer3: document.getElementById("slide44_materials")?.value.trim() || "",
+      answer4: document.getElementById("slide44_steps")?.value.trim() || "",
+      answer5: document.getElementById("slide44_outcome")?.value.trim() || ""
+    };
+
+  }
+
+  function restoreSlide44() {
+    if (!allUserData.slide44Answers) return;
+
+    document.getElementById("slide44_title").value =
+      allUserData.slide44Answers.answer1 || "";
+
+    document.getElementById("slide44_objective").value =
+      allUserData.slide44Answers.answer2 || "";
+
+    document.getElementById("slide44_materials").value =
+      allUserData.slide44Answers.answer3 || "";
+
+    document.getElementById("slide44_steps").value =
+      allUserData.slide44Answers.answer4 || "";
+
+    document.getElementById("slide44_outcome").value =
+      allUserData.slide44Answers.answer5 || "";
+  }
+
+  // Attach auto-save
+  document
+    .querySelectorAll(
+      "#slide44_title, #slide44_objective, #slide44_materials, #slide44_steps, #slide44_outcome"
+    )
+    .forEach(input => {
+      input.addEventListener("input", saveSlide44);
+    });
+
+  // Restore AFTER DOM is ready
+  restoreSlide44();
+
+
+   function saveSlide45() {
+    allUserData.slide45Answers = {
+      q1: document.getElementById("slide45_q1")?.value.trim() || "",
+      q2: document.getElementById("slide45_q2")?.value.trim() || "",
+      q3: document.getElementById("slide45_q3")?.value.trim() || ""
+    };
+  }
+
+  function restoreSlide45() {
+    if (!allUserData.slide45Answers) return;
+
+    document.getElementById("slide45_q1").value =
+      allUserData.slide45Answers.q1 || "";
+
+    document.getElementById("slide45_q2").value =
+      allUserData.slide45Answers.q2 || "";
+
+    document.getElementById("slide45_q3").value =
+      allUserData.slide45Answers.q3 || "";
+  }
+
+  // Auto-save on typing
+  document
+    .querySelectorAll("#slide45_q1, #slide45_q2, #slide45_q3")
+    .forEach(input => {
+      input.addEventListener("input", saveSlide45);
+    });
+
+  restoreSlide45();
+
+});
+
+
+
+document.querySelectorAll('.slide').forEach(slide => {
+  const textarea = slide.querySelector('textarea');
+  if (!textarea) return; // skip if no textarea
+
+  const slideKey = `slide${slide.className.match(/_\d+/)[0].substring(1)}Answer`;
+
+  // Load previously saved answer
+  if (allUserData[slideKey]) {
+    textarea.value = allUserData[slideKey];
+  }
+
+  // Save on input
+  textarea.addEventListener('input', () => {
+    allUserData[slideKey] = textarea.value.trim();
+  });
+});
 
 
 
 const activityBtn = document.getElementById("checkActivityBtn");
+
+function sendToGoogleForm() {
+  const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSebV3erE_Bvl-ZhX2BWdly9-5eI95x_GGnFqTyKoZx7VKGDLA/formResponse";
+console.log(allUserData.slide5_score+allUserData.slide46_score)
+  // Map your answers to the form fields
+ const scoreText = `
+Assessment 1  Score: ${allUserData.slide5_score ?? 0}/10
+Activity 1    Score: ${allUserData.slide10_score ?? 0}/5
+Assessment 2  Score: ${allUserData.slide24_score ?? 0}/10
+Activity 2    Score: ${allUserData.slide27_score ?? 0}/10
+Drag and Drop Score: ${allUserData.slide33_score ?? 0}/7
+Assessment 3  Score: ${allUserData.slide46_score ?? 0}/10
+`;
+  const formData = new URLSearchParams();
+  formData.append("entry.962186271", allUserData.studentName); // Name
+  formData.append("entry.1651984396", scoreText); // Assessment
+  formData.append("entry.9710551",allUserData.studentName+"'s Answer: "+ allUserData.slide18Answer)
+  formData.append("entry.953878073",allUserData.studentName+"'s Answer: "+ allUserData.slide19Answer)
+  formData.append("entry.1781294265",allUserData.studentName+"'s Answer: "+ allUserData.slide20Answer)
+  
+  formData.append("entry.944315347",allUserData.studentName+"'s Answer: "+ allUserData.slide21Answer)
+  formData.append("entry.1343752697",allUserData.studentName+"'s Answer: "+ allUserData.slide22Answer)
+  formData.append("entry.586710763",allUserData.studentName+"'s Answer: "+ allUserData.slide23Answer)
+
+  formData.append("entry.225909391",allUserData.studentName+"'s Answer: "+ allUserData.slide34Answer)
+  formData.append("entry.224420042",allUserData.studentName+"'s Answer: "+ allUserData.slide35Answer)
+  formData.append("entry.2050666399",allUserData.studentName+"'s Answer: "+ allUserData.slide36Answer)
+
+  formData.append("entry.1295480287",allUserData.studentName+"'s Answer: "+ allUserData.slide37Answers.answer1)
+  formData.append("entry.1308167594",allUserData.studentName+"'s Answer: "+ allUserData.slide37Answers.answer2)
+  formData.append("entry.988431368",allUserData.studentName+"'s Answer: "+ allUserData.slide37Answers.answer3)
+
+  formData.append("entry.1454936876",allUserData.studentName+"'s Answer: "+ allUserData.slide43Answers.answer1)
+  formData.append("entry.997953768",allUserData.studentName+"'s Answer: "+ allUserData.slide43Answers.answer2)
+  formData.append("entry.1054760328",allUserData.studentName+"'s Answer: "+ allUserData.slide43Answers.answer3)
+
+  formData.append(
+  "entry.1970267556",
+  "• Project Title: " + (allUserData.slide44Answers?.answer1 || "") + "\n" +
+  "• Objective: " + (allUserData.slide44Answers?.answer2 || "") + "\n" +
+  "• Materials Needed: " + (allUserData.slide44Answers?.answer3 || "") + "\n" +
+  "• Steps to Implement: " + (allUserData.slide44Answers?.answer4 || "") + "\n" +
+  "• Expected Outcome: " + (allUserData.slide44Answers?.answer5 || "")
+);
+  formData.append("entry.803818717",allUserData.studentName+"'s Answer: "+ allUserData.slide45Answers.q1)
+  formData.append("entry.1265258324",allUserData.studentName+"'s Answer: "+ allUserData.slide45Answers.q2)
+  formData.append("entry.1246042489",allUserData.studentName+"'s Answer: "+ allUserData.slide45Answers.q3)
+
+  
+  // Send the POST request
+  fetch(formUrl, {
+    method: "POST",
+    mode: "no-cors", // prevents CORS errors
+    body: formData
+  }).then(() => {
+    console.log("Data sent to Google Form!");
+    localStorage.setItem("submitted", "true");
+  }).catch(err => {
+    console.error("Error sending data to Google Form:", err);
+  });
+}
 
 function showAssessmentResults() {
   const resultsContainer = document.getElementById('assessment-results');
@@ -2587,14 +2841,50 @@ function showAssessmentResults() {
         ${!isCorrect ? `(Correct answer: ${assessmentCorrectAnswers[q].toUpperCase()})` : ''}
       </div>
     `;
+     
   }
+
+ 
+  saveAllData();
+
 
   scoreBox.innerHTML = `You scored ${score} out of ${Object.keys(assessmentCorrectAnswers).length} (${Math.round(score / Object.keys(assessmentCorrectAnswers).length * 100)}%)`;
   detailsBox.innerHTML = summary;
 
   resultsContainer.classList.add('show');
   resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  console.log("Slide 24 Score:"+score)
+  allUserData.slide24_score = score
+  
 }
+/*/ 
+function displayAllSubmissions() {
+  const container = document.getElementById("submissionsTable");
+  let allSubmissions = JSON.parse(localStorage.getItem("allSubmissions")) || [];
+
+  if(allSubmissions.length === 0){
+    container.innerHTML = "<p>No submissions yet.</p>";
+    return;
+  }
+
+  let html = "<table border='1' style='border-collapse:collapse; width:100%'>";
+  html += "<tr><th>Name</th><th>Assessment</th><th>Activity</th><th>Slide26</th><th>Scores</th></tr>";
+
+  allSubmissions.forEach(sub => {
+    html += `<tr>
+      <td>${sub.studentName || 'Unknown'}</td>
+      <td><pre>${JSON.stringify(sub.assessmentAnswers, null, 2)}</pre></td>
+      <td><pre>${JSON.stringify(sub.activityAnswers, null, 2)}</pre></td>
+      <td><pre>${JSON.stringify(sub.slide26Answers, null, 2)}</pre></td>
+      <td><pre>${JSON.stringify(sub.scores, null, 2)}</pre></td>
+    </tr>`;
+  });
+
+  html += "</table>";
+  container.innerHTML = html;
+}
+/*/
+
 
 
 function handleAssessmentCheck(e) {
@@ -2635,17 +2925,18 @@ function handleAssessmentCheck(e) {
   if (slide.classList.contains('_6')) {
     selectAnswer(q, a, btn);
   } 
-  if (slide.classList.contains('_23')) {
+  if (slide.classList.contains('_24')) {
     // Store the answer
     assessmentAnswers[q] = a;
 
+    saveAllData();
     // Highlight selection
     const parent = btn.parentNode;
     parent.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
   }
-   if (slide.classList.contains('_26')) {
-    selectAnswer26(q, a, btn); // Lesson 2
+   if (slide.classList.contains('_27')) {
+    selectAnswer27(q, a, btn); // Lesson 2
   }
 }, { passive: false });
 
@@ -2657,6 +2948,18 @@ function handleAssessmentCheck(e) {
     const activitySlideIndex = 9; // Index of the activity slide (0-based)
     let testCompleted = false;
     let activityCompleted = false;
+  const nameInput = document.getElementById("studentName");
+
+    // Restore once (after loading saved data)
+  if (allUserData.studentName) {
+    nameInput.value = allUserData.studentName;
+  }
+
+  // Save on input
+  nameInput.addEventListener("input", () => {
+    allUserData.studentName = nameInput.value.trim();
+    saveAllData();
+  });
 
     document.addEventListener('DOMContentLoaded', function() {
   // Handle touch events for buttons and interactive elements
@@ -2668,17 +2971,14 @@ function handleAssessmentCheck(e) {
     showAssessmentResults();
   });
 
+
   checkAssessmentBtn.addEventListener("touchend", (e) => {
     e.preventDefault();
     e.stopPropagation();
     showAssessmentResults();
   }, { passive: false });
   interactiveElements.forEach(element => {
-    // Add touch feedback
-    /*element.addEventListener('touchstart', function(e) {
-      this.classList.add('touching');
-      e.preventDefault(); // Prevent default touch behavior
-    }, { passive: false });*/
+  
     element.addEventListener('touchstart', function() {
       this.classList.add('touching');
     });
@@ -2781,24 +3081,51 @@ function handleAssessmentCheck(e) {
         // Enable navigation if not on test/activity slide or they're completed
         enableNavigation();
       }
+      if (index == 46){sendToGoogleForm();}
+       
+      
     }
 
     function nextSlide() {
-      if (current < slides.length - 1) {
-        // Check if we're trying to leave the test slide
-        if (current === testSlideIndex && !testCompleted) {
-          return; // Don't proceed
-        }
-        
-        // Check if we're trying to leave the activity slide
-        if (current === activitySlideIndex && !activityCompleted) {
-          return; // Don't proceed
-        }
-        
-        current++;
-        showSlide(current);
-      }
+  // Check if current slide is the first slide (student name required)
+  if (current === 0) {
+    const nameInput = document.getElementById("studentName");
+    const nameValue = nameInput.value.trim();
+
+    // Remove any existing warning first
+    let existingWarning = document.getElementById("nameWarning");
+    if (existingWarning) existingWarning.remove();
+
+    if (!nameValue) {
+      // Create a warning indicator
+      const warning = document.createElement("div");
+      warning.id = "nameWarning";
+      warning.textContent = "Please enter your name to proceed!";
+      warning.style.color = "red";
+      warning.style.fontWeight = "bold";
+      warning.style.marginTop = "8px";
+      warning.style.textAlign = "center";
+      warning.style.backgroundColor = "#fff3cd";
+      warning.style.padding = "6px";
+      warning.style.borderRadius = "4px";
+
+      // Insert the warning right after the input
+      nameInput.insertAdjacentElement("afterend", warning);
+
+      return; // Stop going to next slide
     }
+  }
+
+  // Existing checks for test and activity slides
+  if (current < slides.length - 1) {
+    if (current === testSlideIndex && !testCompleted) return;
+    if (current === activitySlideIndex && !activityCompleted) return;
+
+    current++;
+    showSlide(current);
+  }
+}
+
 
     function prevSlide() {
       if (current > 0) {
@@ -2854,7 +3181,6 @@ function handleAssessmentCheck(e) {
         const userAnswer = input.value.trim().toUpperCase();
         const correctAnswer = correctAnswers[inputId];
         const feedbackDiv = document.getElementById(`feedback${index + 1}`);
-        
         // Remove previous classes
         input.classList.remove('correct', 'incorrect');
         
@@ -2884,6 +3210,8 @@ function handleAssessmentCheck(e) {
         activityCompleted = true;
         enableNavigation();
       }
+      console.log("Slide 10 score:"+correctCount)
+      allUserData.slide10_score = correctCount
     }
 
     function disableNextButton() {
@@ -2927,7 +3255,7 @@ function handleAssessmentCheck(e) {
       9: 'a',  // Preventing erosion and flooding
       10: 'c'  // Low elevation and proximity to sea
       };
-      const correctAnswers26 = {
+      const correctAnswers27 = {
       1: 'a',
       2: 'a',
       3: 'c',
@@ -2942,16 +3270,21 @@ function handleAssessmentCheck(e) {
       };
 
 
-    let userAnswers26 = {};
+    let userAnswers27 = {};
 
-    function selectAnswer26(questionNumber, choice, btn) {
-      userAnswers26[questionNumber] = choice;
-      btn.parentNode.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-    }
+    function selectAnswer27(questionNumber, choice, btn) {
+    userAnswers27[questionNumber] = choice;
+
+    saveAllData();
+
+    btn.parentNode.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+}
+   
     function selectAnswer(questionNumber, choice, btn) {
       // Store answer
       userAnswers[questionNumber] = choice;
+      saveAllData();
 
       // Remove highlight from other buttons in same question
       const parent = btn.parentNode;
@@ -2965,36 +3298,47 @@ function handleAssessmentCheck(e) {
         checkTestCompletion();
       }
     }
-    const checkBtn26 = document.querySelector('section._26 #checkAnswersBtn');
-    checkBtn26.addEventListener('click', () => showResults26());
-    checkBtn26.addEventListener('touchend', () => showResults26(), { passive: false });
+    const checkBtn27 = document.querySelector('section._27 #checkAnswersBtn');
+    checkBtn27.addEventListener('click', () => showResults27());
+    checkBtn27.addEventListener('touchend', () => showResults27(), { passive: false });
 
-    function showResults26() {
+    function showResults27() {
     let score = 0;
     let summary = "";
-    const total = Object.keys(correctAnswers26).length;
+    const total = Object.keys(correctAnswers27).length;
 
-    for (let q in correctAnswers26) {
-      const isCorrect = userAnswers26[q] === correctAnswers26[q];
+    for (let q in correctAnswers27) {
+      const isCorrect = userAnswers27[q] === correctAnswers27[q];
       if (isCorrect) score++;
 
       summary += `
         <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
           Question ${q}: ${isCorrect ? '✅ Correct' : '❌ Incorrect'}
-          ${!isCorrect ? `(Correct answer: ${correctAnswers26[q].toUpperCase()})` : ''}
+          ${!isCorrect ? `(Correct answer: ${correctAnswers27[q].toUpperCase()})` : ''}
         </div>
       `;
     }
 
     // Use the unique IDs for Slide 26
-    document.getElementById('score-display-26').innerHTML = `You scored ${score} out of ${total} (${Math.round(score/total*100)}%)`;
-    document.getElementById('results-details-26').innerHTML = summary;
-    document.getElementById('results-container-26').classList.add('show');
+    document.getElementById('score-display-27').innerHTML = `You scored ${score} out of ${total} (${Math.round(score/total*100)}%)`;
+    document.getElementById('results-details-27').innerHTML = summary;
+    document.getElementById('results-container-27').classList.add('show');
 
     // Scroll to the results
-    document.getElementById('results-container-26').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById('results-container-27').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    console.log("slide 27 Score:"+score)
+    allUserData.slide27_score = score
   }
+function saveAllData() {
+  // Get existing submissions
+  let allSubmissions = JSON.parse(localStorage.getItem("allSubmissions")) || [];
+  
+  // Add current submission
+  allSubmissions.push(allUserData);
 
+  // Save back
+  localStorage.setItem("allSubmissions", JSON.stringify(allSubmissions));
+}
     function showResults() {
       let score = 0;
       let total = Object.keys(correctAnswers).length;
@@ -3029,9 +3373,12 @@ function handleAssessmentCheck(e) {
       
       // Scroll to results
       resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      console.log("Slide 5 Score:"+score)
+      allUserData.slide5_score = score
     }
 
     // Initialize
+    
     showSlide(0);
   </script>
 
@@ -3128,6 +3475,8 @@ const checkFn = () => {
 
   // Show score: correct / total blank (non-locked) answers
   scoreDisplay.textContent = `Score: ${correctCount} / ${totalAnswers}`;
+  console.log("Slide 33 Score:"+correctCount)
+  allUserData.slide33_score = correctCount
 };
 
 
@@ -3180,12 +3529,15 @@ var checkFn46 = () => {
     }
 
     questionItem.appendChild(indicator);
+    
   });
 
   // Show score
   document.getElementById("scoreDisplay46").textContent =
     `Your Score: ${score} / 10`;
-
+  allUserData.slide46_score = score
+  console.log("slide 46 Score:"+score)
+  
 
 };
 
@@ -3195,10 +3547,13 @@ checkBtn46.addEventListener("touchend", e => {
   e.preventDefault(); // prevent double firing
   checkFn46();
 });
+
+
+
+
 </script>
 
 
 
 </body>
-
 </html>
